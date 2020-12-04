@@ -24,6 +24,7 @@ public class Server {
         ArrayList<Block> blockchain = Controller.readStorage();
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
         Block newBlock = (Block) objectInputStream.readObject();
+        compareBlocks(blockchain,newBlock);
         //Will only add block to blockchain - if the blockchain is either;
         // empty or the last hash of the blockchain is the same as the previous hash of the new block
         if(blockchain.isEmpty()) {
@@ -45,7 +46,6 @@ public class Server {
             System.out.println("Invalid blockchain - missing link");
         }
 
-
         //Store the current blockchain in the storage file
         //FileOutputStream is an output stream for adding data to a file
         //Everytime this code is run the txt file is overwritten into the new txt file
@@ -64,15 +64,15 @@ public class Server {
         serverConnection();
     }
 
-    public void compareBlocks(ArrayList<Block> blockchain, Block newBlock){
+    public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock){
         for (int i = 0; i < blockchain.size(); i++){
             if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())){
                 System.out.println("Block number " + blockchain.get(i) + " has the same name of new file");
                 if (blockchain.get(i).getFileAccessed().equals(newBlock.getFileAccessed())){
-                    System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "  + newBlock.getFileAccessed());
+                    System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "  + newBlock.getFileAccessed() + " by " + newBlock.getUserName());
                 }
                 if (blockchain.get(i).getFileModified().equals(newBlock.getFileModified())){
-                    System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModified());
+                    System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModified() + " by " + newBlock.getUserName());
                 }
             }
         }

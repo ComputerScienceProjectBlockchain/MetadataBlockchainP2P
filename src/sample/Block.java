@@ -87,4 +87,7 @@ public class Block implements Serializable {
         return fileModified;
     }
 
+    public String getUserName() {
+        return userName;
+    }
 }
