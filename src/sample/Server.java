@@ -3,7 +3,7 @@ package sample;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.List;
+
 //Based on program from https://gist.github.com/chatton/14110d2550126b12c0254501dde73616
 public class Server {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -62,5 +62,19 @@ public class Server {
         ss.close();
         socket.close();
         serverConnection();
+    }
+
+    public void compareBlocks(ArrayList<Block> blockchain, Block newBlock){
+        for (int i = 0; i < blockchain.size(); i++){
+            if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())){
+                System.out.println("Block number " + blockchain.get(i) + " has the same name of new file");
+                if (blockchain.get(i).getFileAccessed().equals(newBlock.getFileAccessed())){
+                    System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "  + newBlock.getFileAccessed());
+                }
+                if (blockchain.get(i).getFileModified().equals(newBlock.getFileModified())){
+                    System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModified());
+                }
+            }
+        }
     }
 }

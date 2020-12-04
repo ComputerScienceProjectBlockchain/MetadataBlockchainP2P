@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import java.io.*;
 import java.net.Socket;
