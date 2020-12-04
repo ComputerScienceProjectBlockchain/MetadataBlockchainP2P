@@ -43,4 +43,20 @@ public class Metadata {
                 ", size='" + size + '\'' +
                 '}';
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    public String getLastAccessTime() {
+        return lastAccessTime;
+    }
+
+    public String getLastModifiedTime() {
+        return lastModifiedTime;
+    }
 }

@@ -22,10 +22,10 @@ public class Block implements Serializable {
 
     //Block Constructor.
     public Block(Metadata metadata,String previousHash, String userName) {
-        this.fileTitle = metadata.title;
-        this.fileCreatedTime = metadata.creationTime;
-        this.fileAccessed = metadata.lastAccessTime;
-        this.fileModified = metadata.lastModifiedTime;
+        this.fileTitle = metadata.getTitle();
+        this.fileCreatedTime = metadata.getCreationTime();
+        this.fileAccessed = metadata.getLastAccessTime();
+        this.fileModified = metadata.getLastModifiedTime();
         this.userName = userName;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();

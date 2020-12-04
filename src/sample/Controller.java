@@ -23,7 +23,7 @@ public class Controller {
     public TextField textFieldPath;
 
     public void initialize() throws IOException, ClassNotFoundException {
-        //deleteBlockchain();
+        deleteBlockchain();
         blockchain = readStorage();
         System.out.println(blockchain.size());
     }
@@ -74,7 +74,7 @@ public class Controller {
 
         //When the blockchain is empty, the previous hash is 0 -
         // which is different than the rest of the blockchain
-        if (!textFieldUser.getText().isBlank()) {
+        if (!textFieldUser.getText().isBlank() && !textFieldPath.getText().isBlank()) {
             if (blockchain.isEmpty()) {
                 addBlock(new Block(new Metadata(textFieldPath.getText()), "0", textFieldUser.getText()));
             } else {
@@ -105,7 +105,7 @@ public class Controller {
             updateBlockchain(blockchain);
             }
         } else {
-            System.out.println("User name needed!");
+            System.out.println("Both username and path is needed");
         }
     }
 
