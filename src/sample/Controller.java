@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import java.io.*;
 import java.net.Socket;
@@ -22,7 +23,7 @@ public class Controller {
     public TextField textFieldPath;
 
     public void initialize() throws IOException, ClassNotFoundException {
-        deleteBlockchain();
+        //deleteBlockchain();
         blockchain = readStorage();
         System.out.println(blockchain.size());
     }
@@ -101,5 +102,11 @@ public class Controller {
             socket.close();
             updateBlockchain(blockchain);
         }
+    }
+
+    public void viewBlockchain() {
+        String blockchainJson = StringUtil.getJson(blockchain);
+        System.out.println("\nThe block chain: ");
+        System.out.println(blockchainJson);
     }
 }
