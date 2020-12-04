@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Controller {
     public static ArrayList<Block> blockchain = new ArrayList<>();
+    public TextField textFieldUser;
     ArrayList<String> ipAddresses = new ArrayList<String>(){{
         //add("192.168.0.12");
         //add("192.168.0.17");
@@ -73,15 +74,17 @@ public class Controller {
 
         //When the blockchain is empty, the previous hash is 0 -
         // which is different than the rest of the blockchain
-        if (blockchain.isEmpty()) {
-            addBlock(new Block(new Metadata(textFieldPath.getText()), "0"));
-        } else {
-            addBlock(new Block(new Metadata(textFieldPath.getText()), blockchain.get(blockchain.size()-1).getHash()));
-        }
+        if (!textFieldUser.getText().isBlank()) {
+            if (blockchain.isEmpty()) {
+                addBlock(new Block(new Metadata(textFieldPath.getText()), "0", textFieldUser.getText()));
+            } else {
+                addBlock(new Block(new Metadata(textFieldPath.getText()), blockchain.get(blockchain.size() - 1).getHash(), textFieldUser.getText()));
+            }
         String blockchainJson = StringUtil.getJson(blockchain);
         System.out.println("\nThe block chain: ");
         System.out.println(blockchainJson);
         //Clears the textField after the block is added
+        textFieldUser.clear();
         textFieldPath.clear();
         //When working with one computer, you use localhost as the host
         // - otherwise you use the receivers ip-address
@@ -100,6 +103,9 @@ public class Controller {
             System.out.println("--------------------------------------------");
             socket.close();
             updateBlockchain(blockchain);
+            }
+        } else {
+            System.out.println("User name needed!");
         }
     }
 
