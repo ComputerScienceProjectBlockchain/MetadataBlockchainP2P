@@ -80,11 +80,9 @@ public class Controller {
             } else {
                 addBlock(new Block(new Metadata(textFieldPath.getText()), blockchain.get(blockchain.size() - 1).getHash(), textFieldUser.getText()));
             }
-        String blockchainJson = StringUtil.getJson(blockchain);
-        System.out.println("\nThe block chain: ");
-        System.out.println(blockchainJson);
+        viewBlockchain();
         //Clears the textField after the block is added
-        textFieldUser.clear();
+        //textFieldUser.clear();
         textFieldPath.clear();
         //When working with one computer, you use localhost as the host
         // - otherwise you use the receivers ip-address

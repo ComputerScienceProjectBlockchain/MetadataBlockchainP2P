@@ -24,7 +24,7 @@ public class Server {
         ArrayList<Block> blockchain = Controller.readStorage();
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
         Block newBlock = (Block) objectInputStream.readObject();
-        //compareBlocks(blockchain,newBlock);
+        compareBlocks(blockchain,newBlock);
         //Will only add block to blockchain - if the blockchain is either;
         // empty or the last hash of the blockchain is the same as the previous hash of the new block
         if(blockchain.isEmpty()) {
