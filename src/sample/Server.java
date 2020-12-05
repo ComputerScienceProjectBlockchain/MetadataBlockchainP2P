@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 //Based on program from https://gist.github.com/chatton/14110d2550126b12c0254501dde73616
 public class Server {
+    public static Client client;
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         serverConnection();
     }
@@ -14,14 +16,16 @@ public class Server {
         ServerSocket ss = new ServerSocket(7777);
         System.out.println("ServerSocket awaiting connections...");
         Socket socket = ss.accept(); // blocking call, this will wait until a connection is attempted on this port.
-        System.out.println("Connection from " + socket + "!");
+        client = new Client(socket.getInetAddress().toString(), socket.getPort());
+        Superpeer.add(socket);
+        System.out.println("Connection from " + client.getSocket() + "!");
 
         // get the input stream from the connected socket
-        InputStream inputStream = socket.getInputStream();
+        InputStream inputStream = client.getSocket().getInputStream();
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-        ArrayList<Block> blockchain = Controller.readStorage();
+        ArrayList<Block> blockchain = client.readStorage();
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
         Block newBlock = (Block) objectInputStream.readObject();
         //Will only add block to blockchain - if the blockchain is either;
@@ -35,7 +39,7 @@ public class Server {
             //System.out.println(newBlock.getPreviousHash());
         } else if((blockchain.get(blockchain.size()-1).getHash()).equals(newBlock.getPreviousHash())){
             blockchain.add(newBlock);
-            System.out.println("Received [" + blockchain.size() + "] messages from: " + socket);
+            System.out.println("Received [" + blockchain.size() + "] messages from: " + client.getSocket());
             // print out the text of every message
             System.out.println("All messages:");
             System.out.println(blockchain);
