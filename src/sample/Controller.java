@@ -10,9 +10,9 @@ public class Controller {
     public static ArrayList<Block> blockchain = new ArrayList<>();
     public TextField textFieldUser;
     ArrayList<String> ipAddresses = new ArrayList<String>(){{
-        //add("192.168.0.12");
+        add("192.168.0.12");
         //add("192.168.0.17");
-        add("localhost");
+        //add("localhost");
         //add("192.168.43.63");
         //add("192.168.43.156");
         //add("192.168.43.213");
@@ -23,7 +23,7 @@ public class Controller {
     public TextField textFieldPath;
 
     public void initialize() throws IOException, ClassNotFoundException {
-        deleteBlockchain();
+        //deleteBlockchain();
         blockchain = readStorage();
         System.out.println(blockchain.size());
     }

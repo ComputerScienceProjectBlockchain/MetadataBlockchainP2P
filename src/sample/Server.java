@@ -64,15 +64,17 @@ public class Server {
         serverConnection();
     }
 
-    public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock){
-        for (int i = 0; i < blockchain.size(); i++){
-            if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())){
-                System.out.println("Block number " + blockchain.get(i) + " has the same name of new file");
-                if (blockchain.get(i).getFileAccessed().equals(newBlock.getFileAccessed())){
-                    System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "  + newBlock.getFileAccessed() + " by " + newBlock.getUserName());
-                }
-                if (blockchain.get(i).getFileModified().equals(newBlock.getFileModified())){
-                    System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModified() + " by " + newBlock.getUserName());
+    public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
+        if (blockchain.size() > 0) {
+            for (int i = 0; i < blockchain.size(); i++) {
+                if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())) {
+                    System.out.println("Block number " + i + " has the same name of new file");
+                    if (!blockchain.get(i).getFileAccessed().equals(newBlock.getFileAccessed())) {
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessed() + " by " + newBlock.getUserName());
+                    }
+                    if (!blockchain.get(i).getFileModified().equals(newBlock.getFileModified())) {
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModified() + " by " + newBlock.getUserName());
+                    }
                 }
             }
         }
