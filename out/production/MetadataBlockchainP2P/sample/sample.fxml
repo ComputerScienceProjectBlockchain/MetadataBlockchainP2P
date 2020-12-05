@@ -10,5 +10,6 @@
         <Label text="Path of file: " />
         <TextField fx:id="textFieldPath" />
         <Button mnemonicParsing="false" onAction="#sendData" text="Add to blockchain" />
+      <Button mnemonicParsing="false" onAction="#viewBlockchain" text="View blockchain" />
     </children>
 </FlowPane>

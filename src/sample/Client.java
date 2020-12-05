@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Client {
     private static ArrayList<Block> blockchain = new ArrayList<>();
-    private static ArrayList<String> ipAddresses = new ArrayList<String>();
+
 
     private String ip;
     private int port;
@@ -27,10 +27,6 @@ public class Client {
 
     public ArrayList<Block> getBlockchain(){
         return blockchain;
-    }
-
-    public ArrayList<String> getIpAddresses(){
-        return ipAddresses;
     }
 
     public void update() throws IOException {
@@ -68,12 +64,6 @@ public class Client {
         return (ArrayList<Block>) ois.readObject();
     }
 
-    public ArrayList<String> readIP() throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("ip.txt"));
-
-        //Reads the storage file and lets the ArrayList blockchain be equal to this
-        return (ArrayList<String>) ois.readObject();
-    }
 
     public Socket getSocket(){
         return this.client;
