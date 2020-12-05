@@ -10,6 +10,7 @@ public class Server {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         serverConnection();
     }
+
     public static void serverConnection() throws IOException, ClassNotFoundException {
         // don't need to specify a hostname, it will be the current machine
         ServerSocket ss = new ServerSocket(7777);

@@ -62,20 +62,23 @@ public class Superpeer {
         InputStream inputStream = socket.getInputStream();
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        Object o = objectInputStream.readObject();
+        if (o instanceof String){
         String input = (String) objectInputStream.readObject();
-        if (input.equals("Connect to Super")){
+        if (input.equals("Connect to Super")) {
             readStorage();
-            Client client = new Client(socket.getInetAddress().toString(),port);
+            Client client = new Client(socket.getInetAddress().toString(), port);
             add(socket);
             client.sendEntireBlockchain();
-            System.out.println("Closing sockets.");
-            System.out.println("----------------------");
-            ss.close();
-            socket.close();
-            superServer();
+        }
         } else{
             Server.serverConnection();
         }
+        System.out.println("Closing sockets.");
+        System.out.println("----------------------");
+        ss.close();
+        socket.close();
+        superServer();
         superServer();
     }
 }

@@ -34,7 +34,7 @@ public class Client {
         System.out.println("Connected!");
 
         // get the output stream from the socket.
-        OutputStream outputStream = this.client.getOutputStream();
+        OutputStream outputStream = socket.getOutputStream();
         // create an object output stream from the output stream so we can send an object through it
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         System.out.println("Sending messages to the ServerSocket");
@@ -46,11 +46,11 @@ public class Client {
     }
 
     public void sendBlock() throws IOException {
-            Socket socket = new Socket(ip, port);
-            System.out.println("Connected!");
+        Socket socket = new Socket(ip, port);
+        System.out.println("Connected!");
 
-            // get the output stream from the socket.
-            OutputStream outputStream = this.client.getOutputStream();
+        // get the output stream from the socket.
+        OutputStream outputStream = socket.getOutputStream();
             // create an object output stream from the output stream so we can send an object through it
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             System.out.println("Sending messages to the ServerSocket");
@@ -67,7 +67,7 @@ public class Client {
             System.out.println("Connected!");
 
             // get the output stream from the socket.
-            OutputStream outputStream = this.client.getOutputStream();
+            OutputStream outputStream = socket.getOutputStream();
             // create an object output stream from the output stream so we can send an object through it
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             System.out.println("Sending messages to the ServerSocket");
