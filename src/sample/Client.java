@@ -17,7 +17,7 @@ public class Client {
     public Client(String ip, int port) throws IOException{
         this.ip = ip;
         this.port = port;
-        client = new Socket(ip,port);
+        //client = new Socket(ip,port);
         superPeer = false;
     }
 
@@ -29,7 +29,24 @@ public class Client {
         return blockchain;
     }
 
-    public void update() throws IOException {
+    public void connectToSuper() throws IOException {
+        Socket socket = new Socket(ip, port);
+        System.out.println("Connected!");
+
+        // get the output stream from the socket.
+        OutputStream outputStream = this.client.getOutputStream();
+        // create an object output stream from the output stream so we can send an object through it
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        System.out.println("Sending messages to the ServerSocket");
+        objectOutputStream.writeObject("Connect to Super");
+
+        System.out.println("Closing socket, another connection is now available");
+        System.out.println("--------------------------------------------");
+        socket.close();
+    }
+
+    public void sendBlock() throws IOException {
+            Socket socket = new Socket(ip, port);
             System.out.println("Connected!");
 
             // get the output stream from the socket.
@@ -41,7 +58,24 @@ public class Client {
 
             System.out.println("Closing socket, another connection is now available");
             System.out.println("--------------------------------------------");
-            this.client.close();
+            socket.close();
+            updateBlockchain(blockchain);
+        }
+
+        public void sendEntireBlockchain() throws IOException {
+            Socket socket = new Socket(ip, port);
+            System.out.println("Connected!");
+
+            // get the output stream from the socket.
+            OutputStream outputStream = this.client.getOutputStream();
+            // create an object output stream from the output stream so we can send an object through it
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            System.out.println("Sending messages to the ServerSocket");
+            objectOutputStream.writeObject(blockchain);
+
+            System.out.println("Closing socket, another connection is now available");
+            System.out.println("--------------------------------------------");
+            socket.close();
             updateBlockchain(blockchain);
         }
 
@@ -56,7 +90,7 @@ public class Client {
         }
     }
 
-    public ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
+    public static ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
         //Accesses the storage file, which is where the arraylist of the blockchain is.
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream("storage.txt"));
 

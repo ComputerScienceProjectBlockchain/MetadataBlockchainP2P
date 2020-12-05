@@ -8,17 +8,18 @@ import java.util.ArrayList;
 
 public class Controller {
     public static ArrayList<Block> blockchain = new ArrayList<>();
-    private static ArrayList<String> ipAddresses = new ArrayList<String>();
-    Client client;
+    //private static ArrayList<String> ipAddresses = new ArrayList<String>();
+    Client superPeer;
 
     public static int difficulty = 2;
 
     public TextField textFieldPath;
 
     public void initialize() throws IOException, ClassNotFoundException {
-        client = new Client("localhost", 7777);
+        superPeer = new Client("localhost", 7777);
+        superPeer.connectToSuper();
         deleteBlockchain();
-        blockchain = client.readStorage();
+        blockchain = superPeer.readStorage();
         System.out.println(blockchain.size());
     }
 
@@ -53,7 +54,7 @@ public class Controller {
 
     //A method for sending the blockchain over a network
     public void sendData() throws IOException, ClassNotFoundException {
-        blockchain = client.readStorage();
+        blockchain = Client.readStorage();
 
         //When the blockchain is empty, the previous hash is 0 -
         // which is different than the rest of the blockchain
@@ -65,9 +66,7 @@ public class Controller {
         viewBlockchain();
         //Clears the textField after the block is added
         textFieldPath.clear();
-        client.update();
-        //When working with one computer, you use localhost as the host
-        // - otherwise you use the receivers ip-address
+        superPeer.sendBlock();
     }
 
     public void viewBlockchain() {
