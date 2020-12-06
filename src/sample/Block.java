@@ -1,5 +1,6 @@
 package sample;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
@@ -13,19 +14,22 @@ public class Block implements Serializable {
 
     private final String fileTitle;
     private final String fileCreatedTime;
-    private final String fileAccessed;
+    private final String fileAccessedTime;
+    private final String fileModifiedTime;
     private final String userName;
-    private final String fileModified;
+    //private final String metadata;
     private final long timeStamp;           //as number of milliseconds since 1/1/1970.
     private static int height;              //counting how many blocks there are in the chain
     private int miningNonce;                //nonce used for the mining, starts at 0
 
     //Block Constructor.
+    //instead of the string data, we should use an arrayList containing
+    //the data the should be included in the block
     public Block(Metadata metadata,String previousHash, String userName) {
-        this.fileTitle = metadata.getTitle();
-        this.fileCreatedTime = metadata.getCreationTime();
-        this.fileAccessed = metadata.getLastAccessTime();
-        this.fileModified = metadata.getLastModifiedTime();
+        this.fileTitle = metadata.title;
+        this.fileCreatedTime = metadata.creationTime;
+        this.fileAccessedTime = metadata.lastAccessTime;
+        this.fileModifiedTime = metadata.lastModifiedTime;
         this.userName = userName;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
@@ -39,7 +43,7 @@ public class Block implements Serializable {
                 previousHash +
                         Long.toString(timeStamp) +
                         Integer.toString(nonce) +
-                        fileTitle + fileCreatedTime + fileAccessed + userName
+                        fileTitle + fileCreatedTime + fileAccessedTime + fileModifiedTime + userName
         );
     }
 
@@ -70,7 +74,6 @@ public class Block implements Serializable {
         Block.height = height;
     }
 
-
     public String getFileTitle() {
         return fileTitle;
     }
@@ -79,12 +82,12 @@ public class Block implements Serializable {
         return fileCreatedTime;
     }
 
-    public String getFileAccessed() {
-        return fileAccessed;
+    public String getFileAccessedTime() {
+        return fileAccessedTime;
     }
 
-    public String getFileModified() {
-        return fileModified;
+    public String getFileModifiedTime() {
+        return fileModifiedTime;
     }
 
     public String getUserName() {

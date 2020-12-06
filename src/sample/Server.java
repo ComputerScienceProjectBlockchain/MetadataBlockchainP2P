@@ -21,29 +21,34 @@ public class Server {
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-        ArrayList<Block> blockchain = Controller.readStorage();
+        ArrayList<Block> blockchain = Client.readStorage();
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
-        Block newBlock = (Block) objectInputStream.readObject();
-        compareBlocks(blockchain,newBlock);
-        //Will only add block to blockchain - if the blockchain is either;
-        // empty or the last hash of the blockchain is the same as the previous hash of the new block
-        if(blockchain.isEmpty()) {
-            blockchain.add(newBlock);
-            System.out.println(blockchain);
-        } else if (blockchain.size()==1){
-            blockchain.add(newBlock);
-            System.out.println(blockchain);
-            //System.out.println(newBlock.getPreviousHash());
-        } else if((blockchain.get(blockchain.size()-1).getHash()).equals(newBlock.getPreviousHash())){
-            blockchain.add(newBlock);
-            System.out.println("Received [" + blockchain.size() + "] messages from: " + socket);
-            // print out the text of every message
-            System.out.println("All messages:");
-            System.out.println(blockchain);
-            //blockchain.forEach((msg)-> System.out.println(msg));
-            System.out.println("Length of blockchain: " + blockchain.size());
-        }else {
-            System.out.println("Invalid blockchain - missing link");
+        Object o = objectInputStream.readObject();
+        if (o instanceof Block) {
+            Block newBlock = (Block) objectInputStream.readObject();
+            compareBlocks(blockchain,newBlock);
+            //Will only add block to blockchain - if the blockchain is either;
+            // empty or the last hash of the blockchain is the same as the previous hash of the new block
+            if (blockchain.isEmpty()) {
+                blockchain.add(newBlock);
+                System.out.println(blockchain);
+            } else if (blockchain.size() == 1) {
+                blockchain.add(newBlock);
+                System.out.println(blockchain);
+                //System.out.println(newBlock.getPreviousHash());
+            } else if ((blockchain.get(blockchain.size() - 1).getHash()).equals(newBlock.getPreviousHash())) {
+                blockchain.add(newBlock);
+                System.out.println("Received [" + blockchain.size() + "] messages from: " + socket);
+                // print out the text of every message
+                System.out.println("All messages:");
+                System.out.println(blockchain);
+                //blockchain.forEach((msg)-> System.out.println(msg));
+                System.out.println("Length of blockchain: " + blockchain.size());
+            } else {
+                System.out.println("Invalid blockchain - missing link");
+            }
+        } else if (o instanceof ArrayList){
+            blockchain = (ArrayList<Block>) objectInputStream.readObject();
         }
 
         //Store the current blockchain in the storage file
@@ -69,11 +74,11 @@ public class Server {
             for (int i = 0; i < blockchain.size(); i++) {
                 if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())) {
                     System.out.println("Block number " + i + " has the same name of new file");
-                    if (!blockchain.get(i).getFileAccessed().equals(newBlock.getFileAccessed())) {
-                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessed() + " by " + newBlock.getUserName());
+                    if (!blockchain.get(i).getFileAccessedTime().equals(newBlock.getFileAccessedTime())) {
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
                     }
-                    if (!blockchain.get(i).getFileModified().equals(newBlock.getFileModified())) {
-                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModified() + " by " + newBlock.getUserName());
+                    if (!blockchain.get(i).getFileModifiedTime().equals(newBlock.getFileModifiedTime())) {
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
                     }
                 }
             }
