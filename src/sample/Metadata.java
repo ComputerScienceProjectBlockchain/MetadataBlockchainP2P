@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
+    //class to extract metadata for a file provide through a file path
 public class Metadata {
     String title;
     String path;
@@ -16,10 +17,11 @@ public class Metadata {
 
     public Metadata(String path) throws IOException {
         this.path = path;
-        //In order to access the metadata of the file you have to use the classes
-        // Path and BasicFileAttributes
+            //In order to access the metadata of the file you have to use the classes
+            // Path and BasicFileAttributes
         Path file = Paths.get(path);
         BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+            //different attributes of a files meta data saved as a string
         this.creationTime = String.valueOf(attr.creationTime());
         this.lastAccessTime = String.valueOf(attr.lastAccessTime());
         this.lastModifiedTime = String.valueOf(attr.lastModifiedTime());
@@ -32,6 +34,7 @@ public class Metadata {
         return StringUtil.applySha256(creationTime+lastAccessTime+lastModifiedTime+size+title);
     }*/
 
+        //we override the toString() method so that we can visualize the data we want to have from the file
     @Override
     public String toString() {
         return "Metadata{" +

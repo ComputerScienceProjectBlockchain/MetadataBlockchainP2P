@@ -7,14 +7,20 @@ import java.util.ArrayList;
 
 
 public class Controller {
-    public static ArrayList<Block> blockchain = new ArrayList<>();
-    public TextField textFieldUser;
-    Client superPeer;
-    public static int difficulty = 2;
+        //controller class for a usual JavaFX application
 
+    public static ArrayList<Block> blockchain = new ArrayList<>();
+
+    Client superPeer; //WHY A SUPERPEER HERE ?
+    public static int difficulty = 2;
+        //text field to read the file path
     public TextField textFieldPath;
+    //text field to read the user name
+    public TextField textFieldUser;
+
 
     public void initialize() throws IOException, ClassNotFoundException {
+            //MISLEADING ??
         superPeer = new Client("localhost", 7777);
         superPeer.connectToSuper();
         //deleteBlockchain();
@@ -22,6 +28,7 @@ public class Controller {
         System.out.println(blockchain.size());
     }
 
+        //method to delete blockchain for testing purposes
     public void deleteBlockchain(){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");
@@ -33,46 +40,42 @@ public class Controller {
             e.printStackTrace();
         }
     }
-        /*
-    public static ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
-        //Accesses the storage file, which is where the arraylist of the blockchain is.
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("storage.txt"));
 
-        //Reads the storage file and lets the ArrayList blockchain be equal to this
-        blockchain = (ArrayList<Block>) ois.readObject();
-        return blockchain;
-    }*/
-
-    //A method which adds blocks to the blockchain
+        //A method which adds blocks to the blockchain
     public static void addBlock(Block newBlock) {
+            //first need to mine the block and put some effort in
         newBlock.mineBlock(difficulty);
         blockchain.add(newBlock);
         newBlock.setHeight(newBlock.getHeight()+1);
         System.out.println("Block version number: "+newBlock.getHeight());
     }
 
-    //A method for sending the blockchain over a network
+        //A method for sending the blockchain over a network
     public void sendData() throws IOException, ClassNotFoundException {
+            //Probs not supposed to be Client. here
         blockchain = Client.readStorage();
 
-        //When the blockchain is empty, the previous hash is 0 -
-        // which is different than the rest of the blockchain
+            //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
         if (blockchain.isEmpty()) {
             addBlock(new Block(new Metadata(textFieldPath.getText()), "0",textFieldUser.getText()));
         } else {
             addBlock(new Block(new Metadata(textFieldPath.getText()), blockchain.get(blockchain.size()-1).getHash(),textFieldUser.getText()));
         }
+            //method to print the blockchain
         viewBlockchain();
-        //Clears the textField after the block is added
+            //Clears the textField after the block is added
         textFieldPath.clear();
-
+            //initialize a new socket
         Socket socket = new Socket(superPeer.getIp(),superPeer.getPort());
+            //and send the new blockchain
         superPeer.sendBlock(socket, blockchain);
 
 
     }
-
+        //method to print the blockchain
     public void viewBlockchain() {
+            //Json stand for JavaScript Object Notation
+            //library to print out our blocks in a certain way
         String blockchainJson = StringUtil.getJson(blockchain);
         System.out.println("\nThe block chain: ");
         System.out.println(blockchainJson);
