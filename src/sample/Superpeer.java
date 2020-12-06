@@ -75,6 +75,7 @@ public class Superpeer {
                 client.sendEntireBlockchain(socket);
             } else {
                 Block newBlock = (Block) o;
+                Server.compareBlocks(blockchain,newBlock);
                 blockchain.add(newBlock);
                 for (int i = 0; i < ipAddresses.size(); i++) {
                     Client client = new Client(ipAddresses.get(i), port);

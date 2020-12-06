@@ -72,16 +72,15 @@ public class Server {
     public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
         if (blockchain.size() > 0) {
             for (int i = 0; i < blockchain.size(); i++) {
-                if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())) {
-                    System.out.println("Block number " + i + " has the same name of new file");
-                    if (!blockchain.get(i).getFileAccessedTime().equals(newBlock.getFileAccessedTime())) {
+                if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())){
+                    System.out.println("Block number " + i + " has the same name as the new file");
+                    if (!blockchain.get(i).getFileAccessedTime().equals(newBlock.getFileAccessedTime())){
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
-                    }
-                    if (!blockchain.get(i).getFileModifiedTime().equals(newBlock.getFileModifiedTime())) {
+                    } if (!blockchain.get(i).getFileModifiedTime().equals(newBlock.getFileModifiedTime())){
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
-                    }
                 }
             }
+        }
         }
     }
 }

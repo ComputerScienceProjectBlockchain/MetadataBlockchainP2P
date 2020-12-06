@@ -65,10 +65,8 @@ public class Client {
                 objectOutputStream.writeObject("No blockchain");
             } else {
                 objectOutputStream.writeObject(blockchain.get(blockchain.size() - 1));
+                System.out.println(blockchain.get(blockchain.size()-1));
             }
-            System.out.println("Closing socket, another connection is now available");
-            System.out.println("--------------------------------------------");
-            //socket.close();
             updateBlockchain(blockchain);
         }
 
