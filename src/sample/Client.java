@@ -54,16 +54,19 @@ public class Client {
             // create an object output stream from the output stream so we can send an object through it
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             System.out.println("Sending messages to the ServerSocket");
-            objectOutputStream.writeObject(blockchain.get(blockchain.size()-1));
-
+            if (blockchain.isEmpty()){
+                objectOutputStream.writeObject("No blockchain");
+            } else {
+                objectOutputStream.writeObject(blockchain.get(blockchain.size() - 1));
+            }
             System.out.println("Closing socket, another connection is now available");
             System.out.println("--------------------------------------------");
             socket.close();
             updateBlockchain(blockchain);
         }
 
-        public void sendEntireBlockchain() throws IOException {
-            Socket socket = new Socket(ip, port);
+        public void sendEntireBlockchain(Socket socket) throws IOException {
+            //Socket socket = new Socket(ip, port);
             System.out.println("Connected!");
 
             // get the output stream from the socket.
@@ -75,7 +78,7 @@ public class Client {
 
             System.out.println("Closing socket, another connection is now available");
             System.out.println("--------------------------------------------");
-            socket.close();
+            //socket.close();
             updateBlockchain(blockchain);
         }
 

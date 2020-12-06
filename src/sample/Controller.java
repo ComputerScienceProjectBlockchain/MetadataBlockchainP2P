@@ -18,7 +18,7 @@ public class Controller {
     public void initialize() throws IOException, ClassNotFoundException {
         superPeer = new Client("localhost", 7777);
         superPeer.connectToSuper();
-        deleteBlockchain();
+        //deleteBlockchain();
         blockchain = superPeer.readStorage();
         System.out.println(blockchain.size());
     }

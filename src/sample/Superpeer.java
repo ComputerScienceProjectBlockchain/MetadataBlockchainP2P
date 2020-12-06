@@ -57,29 +57,28 @@ public class Superpeer {
         System.out.println("ServerSocket awaiting connections...");
         Socket socket = ss.accept(); // blocking call, this will wait until a connection is attempted on this port.
         System.out.println("Connection from " + socket + "!");
-
         // get the input stream from the connected socket
         InputStream inputStream = socket.getInputStream();
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         Object o = objectInputStream.readObject();
-        if (o instanceof Block){
-            Server.serverConnection();
-        }
         if (o instanceof String){
-        //String input = (String) objectInputStream.readObject();
-            if (/*input*/o.equals("Connect to Super")) {
+        String input = (String) o;
+            if (input.equals("Connect to Super")) {
                 readStorage();
                 Client client = new Client(socket.getInetAddress().toString(), port);
-                add(socket);
-                client.sendEntireBlockchain();
+                if (!ipAddresses.contains(socket.getInetAddress().toString())) {
+                    add(socket);
+                }
+                client.sendEntireBlockchain(socket);
+            }else {
+                    Server.serverConnection();
             }
         }
         System.out.println("Closing sockets.");
         System.out.println("----------------------");
         ss.close();
         socket.close();
-        superServer();
         superServer();
     }
 }
