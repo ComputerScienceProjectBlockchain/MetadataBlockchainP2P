@@ -2,12 +2,18 @@ package sample;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
     private static ArrayList<Block> blockchain = new ArrayList<>();
 
+    public String getIp() {
+        return ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
 
     private String ip;
     private int port;
@@ -45,8 +51,9 @@ public class Client {
         socket.close();
     }
 
-    public void sendBlock() throws IOException {
-        Socket socket = new Socket(ip, port);
+    public void sendBlock(Socket socket, ArrayList<Block> blockchain) throws IOException, ClassNotFoundException {
+        //Client.blockchain = readStorage();
+        //Socket socket = new Socket(ip, port);
         System.out.println("Connected!");
 
         // get the output stream from the socket.
@@ -61,11 +68,12 @@ public class Client {
             }
             System.out.println("Closing socket, another connection is now available");
             System.out.println("--------------------------------------------");
-            socket.close();
+            //socket.close();
             updateBlockchain(blockchain);
         }
 
-        public void sendEntireBlockchain(Socket socket) throws IOException {
+        public void sendEntireBlockchain(Socket socket) throws IOException, ClassNotFoundException {
+            blockchain = readStorage();
             //Socket socket = new Socket(ip, port);
             System.out.println("Connected!");
 
@@ -76,8 +84,8 @@ public class Client {
             System.out.println("Sending messages to the ServerSocket");
             objectOutputStream.writeObject(blockchain);
 
-            System.out.println("Closing socket, another connection is now available");
-            System.out.println("--------------------------------------------");
+            //System.out.println("Closing socket, another connection is now available");
+            //System.out.println("--------------------------------------------");
             //socket.close();
             updateBlockchain(blockchain);
         }

@@ -66,7 +66,8 @@ public class Controller {
         viewBlockchain();
         //Clears the textField after the block is added
         textFieldPath.clear();
-        superPeer.sendBlock();
+        Socket socket = new Socket(superPeer.getIp(),superPeer.getPort());
+        superPeer.sendBlock(socket, blockchain);
     }
 
     public void viewBlockchain() {

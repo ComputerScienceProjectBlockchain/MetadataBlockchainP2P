@@ -10,29 +10,31 @@ public class Superpeer {
     private final static int port = 7777;
     private static Client superPeer;
     private static ArrayList<String> ipAddresses = new ArrayList<String>();
+    private static ArrayList<Block> blockchain = new ArrayList<Block>();
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         //superPeer = new Client(ip, port);
         //superPeer.setSuperPeer(true);
+        blockchain = readStorage();
         superServer();
         updateIP();
-        if(readIP().isEmpty()){
+        if (readIP().isEmpty()) {
             System.out.println("No peers connected.");
         }
     }
 
-    public static void add(Socket socket){
+    public static void add(Socket socket) {
         ipAddresses.add(socket.getInetAddress().toString());
     }
 
-    public static void updateIP(){
+    public static void updateIP() {
         try {
             FileOutputStream out = new FileOutputStream("ip.txt");
             ObjectOutputStream oos = new ObjectOutputStream(out);
             oos.writeObject(ipAddresses);
             oos.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -62,23 +64,28 @@ public class Superpeer {
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         Object o = objectInputStream.readObject();
-        if (o instanceof String){
-        String input = (String) o;
-            if (input.equals("Connect to Super")) {
+        System.out.println(o);
+            //String input = (String) o;
+            if (o.equals("Connect to Super")) {
                 readStorage();
                 Client client = new Client(socket.getInetAddress().toString(), port);
                 if (!ipAddresses.contains(socket.getInetAddress().toString())) {
                     add(socket);
                 }
                 client.sendEntireBlockchain(socket);
-            }else {
-                    Server.serverConnection();
+            } else {
+                Block newBlock = (Block) o;
+                blockchain.add(newBlock);
+                for (int i = 0; i < ipAddresses.size(); i++) {
+                    Client client = new Client(ipAddresses.get(i), port);
+                    System.out.println("Sending block to " + ipAddresses.get(i));
+                    client.sendBlock(socket, blockchain);
+                }
             }
+            System.out.println("Closing sockets.");
+            System.out.println("----------------------");
+            ss.close();
+            socket.close();
+            superServer();
         }
-        System.out.println("Closing sockets.");
-        System.out.println("----------------------");
-        ss.close();
-        socket.close();
-        superServer();
     }
-}
