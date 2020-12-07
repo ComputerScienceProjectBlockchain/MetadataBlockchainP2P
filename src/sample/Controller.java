@@ -72,7 +72,7 @@ public class Controller {
             //initialize a new socket
         Socket socket = new Socket(superPeer.getIp(),superPeer.getPort());
             //and send the new blockchain
-        superPeer.sendBlock(socket, blockchain);
+        superPeer.sendBlock(blockchain);
 
 
     }

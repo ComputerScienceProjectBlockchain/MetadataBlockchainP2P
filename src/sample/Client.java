@@ -49,6 +49,7 @@ public class Client {
 
     public void sendBlock(ArrayList<Block> blockchain) throws IOException, ClassNotFoundException {
         //Client.blockchain = readStorage();
+        //blockchain = readStorage();
         Socket socket1 = new Socket(ip, port);
         System.out.println("Connected!");
 
