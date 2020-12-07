@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Client {
         //class to make peers for our p2p network
 
-    private static ArrayList<Block> blockchain = new ArrayList<>();
+   /* private static ArrayList<Block> blockchain = new ArrayList<>();
 
     private String ip;
     private int port;
@@ -31,7 +31,7 @@ public class Client {
     }
 
             //method name seems little misleading
-    public void connectToSuper() throws IOException {
+   /* public void connectToSuper() throws IOException {
         Socket socket = new Socket(ip, port);
         System.out.println("Connected!");
 
@@ -50,11 +50,11 @@ public class Client {
     public void sendBlock(ArrayList<Block> blockchain) throws IOException, ClassNotFoundException {
         //Client.blockchain = readStorage();
         //blockchain = readStorage();
-        Socket socket1 = new Socket(ip, port);
+        Socket socket = new Socket(ip, port);
         System.out.println("Connected!");
 
             // get the output stream from the socket.
-        OutputStream outputStream = socket1.getOutputStream();
+        OutputStream outputStream = socket.getOutputStream();
             // create an object output stream from the output stream so we can send an object through it
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         System.out.println("Sending messages to the ServerSocket");
@@ -70,7 +70,7 @@ public class Client {
         updateBlockchain(blockchain);
         }
 
-        public void sendEntireBlockchain(/*Socket socket*/) throws IOException, ClassNotFoundException {
+        public void sendEntireBlockchain() throws IOException, ClassNotFoundException {
                 //save the current blockchain in the arraylist
             blockchain = readStorage();
             Socket socket1 = new Socket(ip, port);
@@ -122,4 +122,7 @@ public class Client {
     public int getPort() {
         return port;
     }
+
+
+    */
 }
