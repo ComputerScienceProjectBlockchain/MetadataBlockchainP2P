@@ -58,7 +58,8 @@ public class Server {
             }
             //if it is an arraylist, then this is an updated version of the blockchain
         } else if (o instanceof ArrayList){
-            blockchain = (ArrayList<Block>) objectInputStream.readObject();
+            //blockchain = (ArrayList<Block>) objectInputStream.readObject();
+            blockchain = (ArrayList<Block>) o;
         }
 
             //Store the current blockchain in the storage file

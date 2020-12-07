@@ -32,7 +32,7 @@ public class Superpeer {
 
         //adds the ip of a peer to the arraylist
     public static void add(Socket socket) {
-        ipAddresses.add(socket.getInetAddress().toString());
+        ipAddresses.add(getIp(socket.getInetAddress().toString()));
     }
 
         //the arraylist of ip's is saved in a txt file and this method update the file
@@ -66,27 +66,30 @@ public class Superpeer {
     public static void superServer() throws IOException, ClassNotFoundException {
         ServerSocket ss = new ServerSocket(port);
         System.out.println("ServerSocket awaiting connections...");
-            // blocking call, this will wait until a connection is attempted on this port
+        // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
         System.out.println("Connection from " + socket + "!");
-            // get the input stream from the connected socket
+        // get the input stream from the connected socket
         InputStream inputStream = socket.getInputStream();
-            // create a DataInputStream so we can read data from it
+        // create a DataInputStream so we can read data from it
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            //returns the object which has been send to the serverSocket
+        //returns the object which has been send to the serverSocket
         Object o = objectInputStream.readObject();
-            //println for testing purposes
+        //println for testing purposes
         System.out.println(o);
-            //String input = (String) o;
-                //check what type of object has been sent
-            if (o.equals("Connect to Super")) {
-                readStorage();
-                Client client = new Client(socket.getInetAddress().toString(), port);
-                if (!ipAddresses.contains(socket.getInetAddress().toString())) {
-                    add(socket);
-                }
-                client.sendEntireBlockchain(socket);
-            } else {
+        //String input = (String) o;
+        //check what type of object has been sent
+        if (o.equals("Connect to Super")) {
+            readStorage();
+            Client client = new Client(getIp(socket.getInetAddress().toString()), 7777);
+            if (!ipAddresses.contains(getIp(socket.getInetAddress().toString()))) {
+                add(socket);
+                System.out.println(getIp(socket.getInetAddress().toString()));
+            }
+            client.sendEntireBlockchain();
+        } else if (o == null) {
+
+        } else {
                     //if a new block has been sent, we save it in a variable
                 Block newBlock = (Block) o;
                     //check if the blockchain already contains a file with the same name as in the new block
@@ -106,5 +109,9 @@ public class Superpeer {
             socket.close();
                 //repetitive calling so that the super peer always listens to new connecting peers
             superServer();
+        }
+
+        public static String getIp(String ip){
+        return ip.substring(1);
         }
     }

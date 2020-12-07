@@ -50,16 +50,20 @@ public class Controller {
         System.out.println("Block version number: "+newBlock.getHeight());
     }
 
-        //A method for sending the blockchain over a network
+        //A method for sending the blockchain over a network - this is run when you press the button
     public void sendData() throws IOException, ClassNotFoundException {
             //Probs not supposed to be Client. here
         blockchain = Client.readStorage();
 
             //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
-        if (blockchain.isEmpty()) {
-            addBlock(new Block(new Metadata(textFieldPath.getText()), "0",textFieldUser.getText()));
+        if (!textFieldUser.getText().isBlank() && !textFieldPath.getText().isBlank()) {
+            if (blockchain.isEmpty()) {
+                addBlock(new Block(new Metadata(textFieldPath.getText()), "0", textFieldUser.getText()));
+            } else {
+                addBlock(new Block(new Metadata(textFieldPath.getText()), blockchain.get(blockchain.size() - 1).getHash(), textFieldUser.getText()));
+            }
         } else {
-            addBlock(new Block(new Metadata(textFieldPath.getText()), blockchain.get(blockchain.size()-1).getHash(),textFieldUser.getText()));
+            System.out.println("Both username and path is needed");
         }
             //method to print the blockchain
         viewBlockchain();

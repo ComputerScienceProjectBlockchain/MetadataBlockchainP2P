@@ -69,23 +69,22 @@ public class Client {
         updateBlockchain(blockchain);
         }
 
-        public void sendEntireBlockchain(Socket socket) throws IOException, ClassNotFoundException {
+        public void sendEntireBlockchain(/*Socket socket*/) throws IOException, ClassNotFoundException {
                 //save the current blockchain in the arraylist
             blockchain = readStorage();
-            //Socket socket = new Socket(ip, port);
-            System.out.println("Connected!");
-
+            Socket socket1 = new Socket(ip, port);
+            //System.out.println("Connected!");
                 // get the output stream from the socket.
-            OutputStream outputStream = socket.getOutputStream();
+            OutputStream outputStream = socket1.getOutputStream();
                 // create an object output stream from the output stream so we can send an object through it
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             System.out.println("Sending messages to the ServerSocket");
                 //send the whole blockchain
             objectOutputStream.writeObject(blockchain);
-
-            //System.out.println("Closing socket, another connection is now available");
-            //System.out.println("--------------------------------------------");
-            //socket.close();
+            System.out.println(blockchain);
+            System.out.println("Closing socket, another connection is now available");
+            System.out.println("--------------------------------------------");
+            socket1.close();
                 //why update here ?
             updateBlockchain(blockchain);
         }
