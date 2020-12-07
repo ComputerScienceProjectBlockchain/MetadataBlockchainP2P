@@ -100,7 +100,7 @@ public class Superpeer {
                 for (int i = 0; i < ipAddresses.size(); i++) {
                     Client client = new Client(ipAddresses.get(i), port);
                     System.out.println("Sending block to " + ipAddresses.get(i));
-                    client.sendBlock(socket, blockchain);
+                    client.sendBlock(blockchain);
                 }
             }
             System.out.println("Closing sockets.");

@@ -47,17 +47,17 @@ public class Client {
         socket.close();
     }
 
-    public void sendBlock(Socket socket, ArrayList<Block> blockchain) throws IOException, ClassNotFoundException {
+    public void sendBlock(ArrayList<Block> blockchain) throws IOException, ClassNotFoundException {
         //Client.blockchain = readStorage();
-        //Socket socket = new Socket(ip, port);
+        Socket socket1 = new Socket(ip, port);
         System.out.println("Connected!");
 
             // get the output stream from the socket.
-        OutputStream outputStream = socket.getOutputStream();
+        OutputStream outputStream = socket1.getOutputStream();
             // create an object output stream from the output stream so we can send an object through it
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         System.out.println("Sending messages to the ServerSocket");
-            //check blocks alrady have been added
+            //check blocks already have been added
         if (blockchain.isEmpty()){
             objectOutputStream.writeObject("No blockchain");
         } else {
