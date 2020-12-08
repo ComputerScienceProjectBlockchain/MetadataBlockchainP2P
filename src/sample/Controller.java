@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import java.io.*;
 import java.net.Socket;
@@ -42,7 +41,7 @@ public class Controller {
         //A method for sending the blockchain over a network - this is run when you press the button
     public void sendData() throws IOException, ClassNotFoundException {
        //peer.sendBlockToSuper();
-        peer.sendBlockToBlockchain(textFieldUser.getText(),textFieldPath.getText());
+        peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
 
 
     }
@@ -54,7 +53,6 @@ public class Controller {
 
     public void connectToSuper() throws IOException, ClassNotFoundException {
         Peer peer = new Peer("localhost");
-        peer.connectToSuper();
         peer.connectToServer();
     }
 }

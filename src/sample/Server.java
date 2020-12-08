@@ -26,31 +26,13 @@ public class Server{
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
-            Block newBlock = (Block) objectInputStream.readObject();
+            Block block = (Block) objectInputStream.readObject();
             //compare method to check if the file name already appears in the blockchain
-            compareBlocks(blockchain, newBlock);
+            compareBlocks(blockchain, block);
             //will only add block to blockchain if the blockchain is either
             //empty or the last hash of the blockchain is the same as the previous hash of the new block
-            if (blockchain.isEmpty()) {
-                blockchain.add(newBlock);
-                System.out.println(blockchain);
-                //DO WE NEED THIS ELSE IF  ???
-            } else if (blockchain.size() == 1) {
-                blockchain.add(newBlock);
-                System.out.println(blockchain);
-                //System.out.println(newBlock.getPreviousHash());
-                //check if hash of last block equals previous hash of new block
-            } else if ((blockchain.get(blockchain.size() - 1).getHash()).equals(newBlock.getPreviousHash())) {
-                blockchain.add(newBlock);
-                System.out.println("Received [" + blockchain.size() + "] messages from: " + socket);
-                // print out the text of every message
-                System.out.println("All messages:");
-                System.out.println(blockchain);
-                //blockchain.forEach((msg)-> System.out.println(msg));
-                System.out.println("Length of blockchain: " + blockchain.size());
-            } else {
-                System.out.println("Invalid blockchain - missing link");
-            }
+            blockchain.add(block);
+
             saveBlockchain();
         }
 

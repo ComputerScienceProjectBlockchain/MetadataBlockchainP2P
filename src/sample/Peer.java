@@ -10,9 +10,17 @@ public class Peer{
     int port = 7777;
     public static int difficulty = 2;
     ArrayList<Block> blockchain = new ArrayList<Block>();
+    Socket socket;
+    OutputStream outputStream;
+    ObjectOutputStream objectOutputStream;
+    InputStream inputStream;
+    ObjectInputStream objectInputStream;
 
-    public Peer(String superPeerIP){
+    public Peer(String superPeerIP) throws IOException, ClassNotFoundException {
         this.superPeerIP = superPeerIP;
+        this.socket = connectToSuper();
+        this.outputStream = this.socket.getOutputStream();
+        this.objectOutputStream = new ObjectOutputStream(this.outputStream);
     }
 
     public Socket connectToSuper() throws IOException, ClassNotFoundException {
@@ -21,13 +29,19 @@ public class Peer{
         System.out.println("Connected!");
 
         // get the output stream from the socket.
-        OutputStream outputStream = socket.getOutputStream();
+        //OutputStream outputStream = socket.getOutputStream();
         // create an object output stream from the output stream so we can send an object through it
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        //ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
         System.out.println("Sending messages to the ServerSocket");
         objectOutputStream.writeObject(blockchain.size());
         System.out.println(blockchain.size());
         return socket;
+    }
+
+    public void sendBlock(Block preparedBlock) throws IOException {
+        objectOutputStream.writeObject(preparedBlock);
+
     }
 
    /* public Socket lookForSuper() throws IOException {
@@ -78,19 +92,20 @@ public class Peer{
         return (ArrayList<Block>) ois.readObject();
     }
 
-    public void sendBlockToBlockchain(String userName, String path) throws IOException, ClassNotFoundException {
+    public void prepareBlock(String userName, String path) throws IOException, ClassNotFoundException {
         //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
+        Block block = null;
         if (!userName.isBlank() && !path.isBlank()) {
             if (blockchain.isEmpty()) {
-                addBlockToBlockchain(new Block(new Metadata(path), "0", userName));
+                block = (new Block(new Metadata(path), "0", userName));
             } else {
-                addBlockToBlockchain(new Block(new Metadata(path), blockchain.get(blockchain.size() - 1).getHash(), userName));
+                block = (new Block(new Metadata(path), blockchain.get(blockchain.size() - 1).getHash(), userName));
             }
         } else {
             System.out.println("Both username and path is needed");
         }
         //and send the new blockchain
-        connectToSuper();
+       sendBlock(block);
     }
 
     //A method which adds blocks to the blockchain

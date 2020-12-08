@@ -48,26 +48,36 @@ public class PeerConnection implements Runnable {
 
 
     }
-    public void sendBlocks(int index) throws IOException, InterruptedException {
+    public void sendBlocks(Object o) throws IOException, InterruptedException {
         System.out.println("Sending blocks");
-        for (int i = index; i < blockchain.size(); i++){
+        if (o instanceof Integer){
+            Integer index = (Integer) o;
+            for (int i = index; i < blockchain.size(); i++){
+                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1),7778);
+                outputStream = socket1.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                System.out.println("blockchain length:" +blockchain.size());
+                objectOutputStream.writeObject(blockchain.get(i));
+                //TimeUnit.SECONDS.sleep(10);
+                System.out.println(blockchain.get(i));
+            }
+        } else if (o instanceof Block){
+            Block block = (Block) o;
             Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1),7778);
             outputStream = socket1.getOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            System.out.println("blockchain length:" +blockchain.size());
-            objectOutputStream.writeObject(blockchain.get(i));
-            //TimeUnit.SECONDS.sleep(10);
-            System.out.println(blockchain.get(i));
+            objectOutputStream.writeObject(block);
         }
     }
 
-    public int receiveBlocks() throws IOException, ClassNotFoundException {
+    public Object receiveBlocks() throws IOException, ClassNotFoundException {
         System.out.println("Receiving blocks");
         inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-        int sizeOfPeerBlockchain = (int) objectInputStream.readObject();
-        System.out.println(sizeOfPeerBlockchain);
-        return sizeOfPeerBlockchain;
+        //Object o = objectInputStream.readObject();
+        //int sizeOfPeerBlockchain = (int) objectInputStream.readObject();
+       // System.out.println(sizeOfPeerBlockchain);
+        return objectInputStream.readObject();
     }
 }
 
@@ -132,4 +142,21 @@ public class PeerConnection implements Runnable {
             }
         }
     }
+
+    if (blockchain.isEmpty()) {
+                blockchain.add(newBlock);
+                System.out.println(blockchain);
+                //System.out.println(newBlock.getPreviousHash());
+                //check if hash of last block equals previous hash of new block
+            } else if ((blockchain.get(blockchain.size() - 1).getHash()).equals(newBlock.getPreviousHash())) {
+                blockchain.add(newBlock);
+                System.out.println("Received [" + blockchain.size() + "] messages from: " + socket);
+                // print out the text of every message
+                System.out.println("All messages:");
+                System.out.println(blockchain);
+                //blockchain.forEach((msg)-> System.out.println(msg));
+                System.out.println("Length of blockchain: " + blockchain.size());
+            } else {
+                System.out.println("Invalid blockchain - missing link");
+            }
  */
