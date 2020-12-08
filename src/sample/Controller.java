@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import java.io.*;
 import java.net.Socket;
@@ -16,12 +17,14 @@ public class Controller {
     //text field to read the user name
     public TextField textFieldUser;
 
-
+/*
     public void initialize() throws IOException, ClassNotFoundException {
         Peer peer = new Peer("localhost");
         peer.connectToSuper();
         peer.connectToServer();
     }
+
+ */
 
         //method to delete blockchain for testing purposes
     public void deleteBlockchain(){
@@ -47,5 +50,11 @@ public class Controller {
     public void viewBlockchain() {
         //peer.viewBlockchain();
         peer.viewBlockchain();
+    }
+
+    public void connectToSuper() throws IOException, ClassNotFoundException {
+        Peer peer = new Peer("localhost");
+        peer.connectToSuper();
+        peer.connectToServer();
     }
 }
