@@ -22,8 +22,6 @@ public class Server implements Runnable{
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
-        //save the input as an object
-        Object o = objectInputStream.readObject();
             Block newBlock = (Block) objectInputStream.readObject();
             //compare method to check if the file name already appears in the blockchain
             compareBlocks(blockchain, newBlock);

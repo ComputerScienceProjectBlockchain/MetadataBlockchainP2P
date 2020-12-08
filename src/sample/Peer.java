@@ -15,7 +15,7 @@ public class Peer{
         this.superPeerIP = superPeerIP;
     }
 
-    public void connectToSuper() throws IOException, ClassNotFoundException {
+    public Socket connectToSuper() throws IOException, ClassNotFoundException {
         blockchain = readStorage();
         Socket socket = new Socket(superPeerIP, port);
         System.out.println("Connected!");
@@ -26,23 +26,21 @@ public class Peer{
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         System.out.println("Sending messages to the ServerSocket");
         objectOutputStream.writeObject(blockchain.size());
-
+        return socket;
     }
 
-    public Socket lookForSuper() throws IOException {
-        ServerSocket ss = new ServerSocket(7778);
+   /* public Socket lookForSuper() throws IOException {
+        ServerSocket ss = new ServerSocket(7777);
         System.out.println("ServerSocket awaiting connections...");
         // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
         return socket;
-    }
+    }*/
 
-    public void connectToServer() throws IOException {
-        while(true){
-           Socket socket = lookForSuper();
+    public void connectToServer(Socket socket) throws IOException, ClassNotFoundException {
+           //Socket socket = lookForSuper();
            Server server = new Server(blockchain,socket);
-           new Thread(server).start();
-        }
+           server.serverConnection();
     }
 
     public void saveBlockchain(){

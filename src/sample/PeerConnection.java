@@ -17,6 +17,7 @@ public class PeerConnection implements Runnable {
     public void run() {
         try {
             establishStreams();
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -37,7 +38,7 @@ public class PeerConnection implements Runnable {
         //receive blocks
         //Mangler method in this class
 
-        blockchain = superpeer.getBlocks();
+        this.blockchain = superpeer.getBlocks();
 
         //sortering
         sendBlocks(receiveBlocks());
@@ -50,8 +51,10 @@ public class PeerConnection implements Runnable {
         System.out.println("Sending blocks");
         outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        System.out.println("blockchain length:" +blockchain.size());
         for (int i = index; i < blockchain.size(); i++){
             objectOutputStream.writeObject(blockchain.get(i));
+            System.out.println(blockchain.get(i));
         }
     }
 
@@ -59,7 +62,8 @@ public class PeerConnection implements Runnable {
         System.out.println("Receiving blocks");
         inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-        int sizeOfPeerBlockchain = objectInputStream.read();
+        int sizeOfPeerBlockchain = (int) objectInputStream.readObject();
+        System.out.println(sizeOfPeerBlockchain);
         return sizeOfPeerBlockchain;
     }
 }

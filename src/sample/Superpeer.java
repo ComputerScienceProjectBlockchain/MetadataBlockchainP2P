@@ -38,6 +38,7 @@ public class Superpeer {
         System.out.println("ServerSocket awaiting connections...");
         // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
+        ss.close();
         return socket;
     }
 
@@ -57,7 +58,7 @@ public class Superpeer {
 
 
     public ArrayList<Block> getBlocks() throws IOException, ClassNotFoundException {
-        readStorage();
+        blockchain = readStorage();
         return blockchain;
     }
 }
