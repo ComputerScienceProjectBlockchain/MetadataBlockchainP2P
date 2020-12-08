@@ -19,8 +19,6 @@ public class Peer{
     public Peer(String superPeerIP) throws IOException, ClassNotFoundException {
         this.superPeerIP = superPeerIP;
         this.socket = connectToSuper();
-        this.outputStream = this.socket.getOutputStream();
-        this.objectOutputStream = new ObjectOutputStream(this.outputStream);
     }
 
     public Socket connectToSuper() throws IOException, ClassNotFoundException {
@@ -29,12 +27,12 @@ public class Peer{
         System.out.println("Connected!");
 
         // get the output stream from the socket.
-        //OutputStream outputStream = socket.getOutputStream();
+        this.outputStream = socket.getOutputStream();
         // create an object output stream from the output stream so we can send an object through it
-        //ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        this.objectOutputStream = new ObjectOutputStream(this.outputStream);
 
         System.out.println("Sending messages to the ServerSocket");
-        objectOutputStream.writeObject(blockchain.size());
+        this.objectOutputStream.writeObject(blockchain.size());
         System.out.println(blockchain.size());
         return socket;
     }

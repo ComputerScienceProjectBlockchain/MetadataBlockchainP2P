@@ -26,13 +26,13 @@ public class Server{
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
-            Block block = (Block) objectInputStream.readObject();
+
+        Block block = (Block) objectInputStream.readObject();
             //compare method to check if the file name already appears in the blockchain
             compareBlocks(blockchain, block);
             //will only add block to blockchain if the blockchain is either
             //empty or the last hash of the blockchain is the same as the previous hash of the new block
             blockchain.add(block);
-
             saveBlockchain();
         }
 
