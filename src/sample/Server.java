@@ -7,16 +7,20 @@ import java.util.ArrayList;
 //class the sets up a connection for the peers and the super peer
 
 //Based on program from https://gist.github.com/chatton/14110d2550126b12c0254501dde73616
-public class Server implements Runnable{
+public class Server{
     ArrayList<Block> blockchain = new ArrayList<Block>();
-    Socket socket;
+    //Socket socket;
 
-    public Server(ArrayList<Block> blockchain, Socket socket) {
+    public Server(ArrayList<Block> blockchain) {
         this.blockchain = blockchain;
-        this.socket = socket;
+        //this.socket = socket;
     }
 
     public void serverConnection() throws IOException, ClassNotFoundException {
+        ServerSocket ss = new ServerSocket(7778);
+        System.out.println("Waiting for connection...");
+        Socket socket = ss.accept();
+        ss.close();
         // get the input stream from the connected socket
         InputStream inputStream = socket.getInputStream();
         // create a DataInputStream so we can read data from it.
@@ -75,17 +79,6 @@ public class Server implements Runnable{
                 }
             }
         }
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            serverConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }

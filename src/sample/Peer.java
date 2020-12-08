@@ -26,6 +26,7 @@ public class Peer{
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         System.out.println("Sending messages to the ServerSocket");
         objectOutputStream.writeObject(blockchain.size());
+        System.out.println(blockchain.size());
         return socket;
     }
 
@@ -37,10 +38,12 @@ public class Peer{
         return socket;
     }*/
 
-    public void connectToServer(Socket socket) throws IOException, ClassNotFoundException {
+    public void connectToServer() throws IOException, ClassNotFoundException {
            //Socket socket = lookForSuper();
-           Server server = new Server(blockchain,socket);
-           server.serverConnection();
+        while(true) {
+            Server server = new Server(blockchain);
+            server.serverConnection();
+        }
     }
 
     public void saveBlockchain(){

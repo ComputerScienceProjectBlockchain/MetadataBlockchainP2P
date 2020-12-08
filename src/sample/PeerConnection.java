@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class PeerConnection implements Runnable {
 
@@ -18,7 +19,7 @@ public class PeerConnection implements Runnable {
         try {
             establishStreams();
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -28,7 +29,7 @@ public class PeerConnection implements Runnable {
         this.superpeer = superpeer;
     }
 
-    public void establishStreams() throws IOException, ClassNotFoundException {
+    public void establishStreams() throws IOException, ClassNotFoundException, InterruptedException {
         //I nt tråd PeerConnection
         //add to active connections
         //add()
@@ -47,13 +48,15 @@ public class PeerConnection implements Runnable {
 
 
     }
-    public void sendBlocks(int index) throws IOException {
+    public void sendBlocks(int index) throws IOException, InterruptedException {
         System.out.println("Sending blocks");
-        outputStream = socket.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-        System.out.println("blockchain length:" +blockchain.size());
         for (int i = index; i < blockchain.size(); i++){
+            Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1),7778);
+            outputStream = socket1.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            System.out.println("blockchain length:" +blockchain.size());
             objectOutputStream.writeObject(blockchain.get(i));
+            //TimeUnit.SECONDS.sleep(10);
             System.out.println(blockchain.get(i));
         }
     }

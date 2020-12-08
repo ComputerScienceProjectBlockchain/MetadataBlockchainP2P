@@ -19,8 +19,8 @@ public class Controller {
 
     public void initialize() throws IOException, ClassNotFoundException {
         Peer peer = new Peer("localhost");
-        Socket socket = peer.connectToSuper();
-        peer.connectToServer(socket);
+        peer.connectToSuper();
+        peer.connectToServer();
     }
 
         //method to delete blockchain for testing purposes
