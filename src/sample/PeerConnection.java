@@ -40,7 +40,7 @@ public class PeerConnection implements Runnable {
         blockchain = superpeer.getBlocks();
 
         //sortering
-        receiveBlocks();
+        sendBlocks(receiveBlocks());
         // send blocks
         //Mangler method in this class
 
@@ -55,19 +55,12 @@ public class PeerConnection implements Runnable {
         }
     }
 
-    public void receiveBlocks() throws IOException, ClassNotFoundException {
+    public int receiveBlocks() throws IOException, ClassNotFoundException {
         System.out.println("Receiving blocks");
         inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-        Block block = (Block) objectInputStream.readObject();
-        for (int i = 0; i < blockchain.size(); i++){
-            if (blockchain.get(i).getPreviousHash().equals(block.getPreviousHash())){
-                sendBlocks(i);
-            } else if (!blockchain.contains(block)){
-                blockchain.add(block);
-                sendBlocks(blockchain.size()-1);
-            }
-        }
+        int sizeOfPeerBlockchain = objectInputStream.read();
+        return sizeOfPeerBlockchain;
     }
 }
 
@@ -115,4 +108,21 @@ public class PeerConnection implements Runnable {
         // create a DataInputStream so we can read data from it
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+
+        if (blockchain.isEmpty()){
+            sendBlocks(0);
+        } else {
+            for (int i = 0; i < blockchain.size(); i++) {
+                if (blockchain.get(i).getPreviousHash().equals(block.getPreviousHash())) {
+                    System.out.println("Ko");
+                    sendBlocks(i);
+                } else if (!blockchain.contains(block)) {
+                    blockchain.add(block);
+                    System.out.println("Bo");
+                    sendBlocks(blockchain.size() - 1);
+                }
+            }
+        }
+    }
  */

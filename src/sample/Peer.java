@@ -25,18 +25,12 @@ public class Peer{
         // create an object output stream from the output stream so we can send an object through it
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         System.out.println("Sending messages to the ServerSocket");
-        //check blocks already have been added
-        if (blockchain.isEmpty()){
-            objectOutputStream.writeObject("No blockchain");
-        } else {
-            //if not empty send the last block of the blockchain
-            objectOutputStream.writeObject(blockchain.get(blockchain.size() - 1));
-            System.out.println(blockchain.get(blockchain.size()-1));
-        }
+        objectOutputStream.writeObject(blockchain.size());
+
     }
 
     public Socket lookForSuper() throws IOException {
-        ServerSocket ss = new ServerSocket(7777);
+        ServerSocket ss = new ServerSocket(7778);
         System.out.println("ServerSocket awaiting connections...");
         // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
@@ -115,3 +109,14 @@ public class Peer{
 
 
 }
+
+/*
+//check blocks already have been added
+        if (blockchain.isEmpty()){
+            objectOutputStream.writeObject("No blockchain");
+        } else {
+            //if not empty send the last block of the blockchain
+            objectOutputStream.writeObject(blockchain.get(blockchain.size() - 1));
+            System.out.println(blockchain.get(blockchain.size()-1));
+        }
+ */
