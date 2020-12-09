@@ -37,9 +37,38 @@ public class Peer{
         return socket;
     }
 
-    public void sendBlock(Block preparedBlock) throws IOException {
-        objectOutputStream.writeObject(preparedBlock);
+    public Socket connectToSuper(Block block) throws IOException, ClassNotFoundException {
+        blockchain = readStorage();
+        Socket socket = new Socket(superPeerIP, port);
+        System.out.println("Connected!");
 
+        // get the output stream from the socket.
+        this.outputStream = socket.getOutputStream();
+        // create an object output stream from the output stream so we can send an object through it
+        this.objectOutputStream = new ObjectOutputStream(this.outputStream);
+
+        System.out.println("Sending messages to the ServerSocket");
+        this.objectOutputStream.writeObject(block);
+        System.out.println(block);
+        return socket;
+    }
+
+
+    public void prepareBlock(String userName, String path) throws IOException, ClassNotFoundException {
+        //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
+        Block block;
+        if (blockchain.isEmpty()) {
+            block = (new Block(new Metadata(path), "0", userName));
+        } else {
+            block = (new Block(new Metadata(path), blockchain.get(blockchain.size() - 1).getHash(), userName));
+        }
+        sendBlock(block);
+    }
+
+    public void sendBlock(Block preparedBlock) throws IOException, ClassNotFoundException {
+        connectToSuper(preparedBlock);
+        Server server = new Server(blockchain);
+        server.serverConnection();
     }
 
    /* public Socket lookForSuper() throws IOException {
@@ -54,30 +83,11 @@ public class Peer{
            //Socket socket = lookForSuper();
         while(true) {
             Server server = new Server(blockchain);
-            server.serverConnection();
-        }
-    }
-
-    public void saveBlockchain(){
-        try {
-            FileOutputStream out = new FileOutputStream("storage.txt");
-            ObjectOutputStream oos = new ObjectOutputStream(out);
-            oos.writeObject(blockchain);
-            oos.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //method to update the blockchain
-    public void updateBlockchain(ArrayList<Block> blockchain){
-        try {
-            FileOutputStream out = new FileOutputStream("storage.txt");
-            ObjectOutputStream oos = new ObjectOutputStream(out);
-            oos.writeObject(blockchain);
-            oos.close();
-        } catch(Exception e) {
-            e.printStackTrace();
+            Object o = server.serverConnection();
+            if (o.equals("done")){
+                System.out.println("Entire blockchain received");
+                break;
+            }
         }
     }
 
@@ -90,21 +100,6 @@ public class Peer{
         return (ArrayList<Block>) ois.readObject();
     }
 
-    public void prepareBlock(String userName, String path) throws IOException, ClassNotFoundException {
-        //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
-        Block block = null;
-        if (!userName.isBlank() && !path.isBlank()) {
-            if (blockchain.isEmpty()) {
-                block = (new Block(new Metadata(path), "0", userName));
-            } else {
-                block = (new Block(new Metadata(path), blockchain.get(blockchain.size() - 1).getHash(), userName));
-            }
-        } else {
-            System.out.println("Both username and path is needed");
-        }
-        //and send the new blockchain
-       sendBlock(block);
-    }
 
     //A method which adds blocks to the blockchain
     public void addBlockToBlockchain(Block newBlock) {
@@ -115,10 +110,14 @@ public class Peer{
         System.out.println("Block version number: "+newBlock.getHeight());
     }
 
-    public void viewBlockchain(){
-        String blockchainJson = StringUtil.getJson(blockchain);
-        System.out.println("\nThe block chain: ");
-        System.out.println(blockchainJson);
+    public void viewBlockchain() {
+        if (blockchain.isEmpty()) {
+            System.out.println("No blockchain to view");
+        } else {
+            String blockchainJson = StringUtil.getJson(blockchain);
+            System.out.println("\nThe block chain: ");
+            System.out.println(blockchainJson);
+        }
     }
 
 

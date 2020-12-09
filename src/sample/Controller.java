@@ -16,14 +16,15 @@ public class Controller {
     //text field to read the user name
     public TextField textFieldUser;
 
-/*
-    public void initialize() throws IOException, ClassNotFoundException {
-        Peer peer = new Peer("localhost");
-        peer.connectToSuper();
-        peer.connectToServer();
+
+  public void initialize() throws IOException, ClassNotFoundException {
+      this.peer = new Peer("localhost");
+      peer.connectToServer();
     }
 
- */
+
+
+
 
         //method to delete blockchain for testing purposes
     public void deleteBlockchain(){
@@ -41,10 +42,14 @@ public class Controller {
         //A method for sending the blockchain over a network - this is run when you press the button
     public void sendData() throws IOException, ClassNotFoundException {
        //peer.sendBlockToSuper();
-        peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
-
-
+        if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
+            peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
+        }else {
+            System.out.println("Both username and path is needed");
+        }
+        textFieldPath.clear();
     }
+
         //method to print the blockchain
     public void viewBlockchain() {
         //peer.viewBlockchain();

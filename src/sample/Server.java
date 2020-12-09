@@ -7,7 +7,7 @@ import java.util.ArrayList;
 //class the sets up a connection for the peers and the super peer
 
 //Based on program from https://gist.github.com/chatton/14110d2550126b12c0254501dde73616
-public class Server{
+public class Server {
     ArrayList<Block> blockchain = new ArrayList<Block>();
     //Socket socket;
 
@@ -16,7 +16,7 @@ public class Server{
         //this.socket = socket;
     }
 
-    public void serverConnection() throws IOException, ClassNotFoundException {
+    public Object serverConnection() throws IOException, ClassNotFoundException {
         ServerSocket ss = new ServerSocket(7778);
         System.out.println("Waiting for connection...");
         Socket socket = ss.accept();
@@ -26,15 +26,21 @@ public class Server{
         // create a DataInputStream so we can read data from it.
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
-
-        Block block = (Block) objectInputStream.readObject();
+        Object o = objectInputStream.readObject();
+        if (o.equals("Entire blockchain sent") || o.equals("Is Empty")) {
+            return "done";
+        } else {
+            Block block = (Block) o;
             //compare method to check if the file name already appears in the blockchain
             compareBlocks(blockchain, block);
             //will only add block to blockchain if the blockchain is either
             //empty or the last hash of the blockchain is the same as the previous hash of the new block
             blockchain.add(block);
             saveBlockchain();
+            return block;
         }
+    }
+
 
     public void saveBlockchain(){
         try {

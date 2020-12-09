@@ -11,6 +11,7 @@ public class PeerConnection implements Runnable {
     Socket socket;
     private Superpeer superpeer;
     InputStream inputStream;
+    public static int difficulty = 2;
     OutputStream outputStream;
     ArrayList<Block> blockchain = new ArrayList<Block>();
 
@@ -48,25 +49,47 @@ public class PeerConnection implements Runnable {
 
 
     }
+
     public void sendBlocks(Object o) throws IOException, InterruptedException {
         System.out.println("Sending blocks");
-        if (o instanceof Integer){
+        System.out.println(o);
+        if (o instanceof Integer) {
             Integer index = (Integer) o;
-            for (int i = index; i < blockchain.size(); i++){
-                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1),7778);
+            if (blockchain.isEmpty()) {
+                System.out.println("Blockchain is empty");
+                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
                 outputStream = socket1.getOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                System.out.println("blockchain length:" +blockchain.size());
-                objectOutputStream.writeObject(blockchain.get(i));
-                //TimeUnit.SECONDS.sleep(10);
-                System.out.println(blockchain.get(i));
+                objectOutputStream.writeObject("Is Empty");
+            } else {
+                for (int i = index; i < blockchain.size(); i++) {
+                    Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
+                    outputStream = socket1.getOutputStream();
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                    System.out.println("blockchain length:" + blockchain.size());
+                    objectOutputStream.writeObject(blockchain.get(i));
+                    //TimeUnit.SECONDS.sleep(10);
+                    System.out.println(blockchain.get(i));
+                }
+                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
+                outputStream = socket1.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                objectOutputStream.writeObject("Entire blockchain sent");
+                socket1.close();
             }
-        } else if (o instanceof Block){
+        } else if (o instanceof Block) {
             Block block = (Block) o;
-            Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1),7778);
-            outputStream = socket1.getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(block);
+            if (block.getPreviousHash().equals(blockchain.get(blockchain.size()-1).getHash())) {
+                addBlockToBlockchain(block);
+                //This needs to be sent to all active peers
+                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
+                outputStream = socket1.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                objectOutputStream.writeObject(block);
+                System.out.println("Sending back block");
+            } else {
+                System.out.println("Invalid blockchain");
+            }
         }
     }
 
@@ -76,8 +99,31 @@ public class PeerConnection implements Runnable {
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         //Object o = objectInputStream.readObject();
         //int sizeOfPeerBlockchain = (int) objectInputStream.readObject();
-       // System.out.println(sizeOfPeerBlockchain);
+        // System.out.println(sizeOfPeerBlockchain);
         return objectInputStream.readObject();
+    }
+
+    //A method which adds blocks to the blockchain
+    public void addBlockToBlockchain(Block newBlock) {
+        //first need to mine the block and put some effort in
+        newBlock.mineBlock(difficulty);
+        blockchain.add(newBlock);
+        newBlock.setHeight(newBlock.getHeight() + 1);
+        System.out.println("Block version number: " + newBlock.getHeight());
+        updateBlockchain(blockchain);
+    }
+
+
+    //method to update the blockchain
+    public void updateBlockchain(ArrayList<Block> blockchain){
+        try {
+            FileOutputStream out = new FileOutputStream("storage.txt");
+            ObjectOutputStream oos = new ObjectOutputStream(out);
+            oos.writeObject(blockchain);
+            oos.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
