@@ -1,79 +1,65 @@
 package sample;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
+    //This class is basically the connection between the super peer and all incoming peers
+    //for each incoming peer we will have a new thread
 public class PeerConnection implements Runnable {
 
-    Socket socket;
+    Socket socket;  //Superpeer socket ?
     private Superpeer superpeer;
     InputStream inputStream;
-    public static int difficulty = 2;
     OutputStream outputStream;
-    ArrayList<Block> blockchain = new ArrayList<Block>();
+    public static int difficulty = 2;
+    ArrayList<Block> blockchain = new ArrayList<>();
 
     @Override
     public void run() {
         try {
             establishStreams();
 
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+        //new constructor which takes the socket of the peer
+        //and the super peer as input
     public PeerConnection(Socket socket, Superpeer superpeer) {
         this.socket = socket;
         this.superpeer = superpeer;
     }
 
-    public void establishStreams() throws IOException, ClassNotFoundException, InterruptedException {
-        //I nt tråd PeerConnection
-        //add to active connections
-        //add()
-        superpeer.add(this.socket);
-
-
-        //receive blocks
-        //Mangler method in this class
-
-        this.blockchain = superpeer.getBlocks();
-
-        //sortering
+    public void establishStreams() throws IOException, ClassNotFoundException{
+            //add the socket IP to the super peers arraylist
+        superpeer.addIP(this.socket);
+            //get the latest version of the blockchain
+        this.blockchain = superpeer.readStorage();
+            //method to send blocks to the peer
+            //how many blocks the method sends is based on what the input is
+            //further explanation in the method
         sendBlocks(receiveBlocks());
-        // send blocks
-        //Mangler method in this class
-
-
     }
 
-    public void sendBlocks(Object o) throws IOException, InterruptedException {
+        //we should probably split this method in several methods
+    public void sendBlocks(Object o) throws IOException{
         System.out.println("Sending blocks");
-        System.out.println(o);
+        Socket socket1 = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+        outputStream = socket1.getOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         if (o instanceof Integer) {
             Integer index = (Integer) o;
             if (blockchain.isEmpty()) {
                 System.out.println("Blockchain is empty");
-                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
-                outputStream = socket1.getOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject("Is Empty");
             } else {
                 for (int i = index; i < blockchain.size(); i++) {
-                    Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
-                    outputStream = socket1.getOutputStream();
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                     System.out.println("blockchain length:" + blockchain.size());
                     objectOutputStream.writeObject(blockchain.get(i));
-                    //TimeUnit.SECONDS.sleep(10);
                     System.out.println(blockchain.get(i));
                 }
-                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
-                outputStream = socket1.getOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject("Entire blockchain sent");
                 socket1.close();
             }
@@ -81,10 +67,6 @@ public class PeerConnection implements Runnable {
             Block block = (Block) o;
             if (block.getPreviousHash().equals(blockchain.get(blockchain.size()-1).getHash())) {
                 addBlockToBlockchain(block);
-                //This needs to be sent to all active peers
-                Socket socket1 = new Socket(socket.getInetAddress().toString().substring(1), 7778);
-                outputStream = socket1.getOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(block);
                 System.out.println("Sending back block");
             } else {
@@ -93,19 +75,18 @@ public class PeerConnection implements Runnable {
         }
     }
 
+        //method to receive the number of blocks a peer has
+        //with that the super peer can check if the peer missed to receive some blocks
     public Object receiveBlocks() throws IOException, ClassNotFoundException {
         System.out.println("Receiving blocks");
         inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-        //Object o = objectInputStream.readObject();
-        //int sizeOfPeerBlockchain = (int) objectInputStream.readObject();
-        // System.out.println(sizeOfPeerBlockchain);
         return objectInputStream.readObject();
     }
 
-    //A method which adds blocks to the blockchain
+        //A method which adds blocks to the blockchain
     public void addBlockToBlockchain(Block newBlock) {
-        //first need to mine the block and put some effort in
+            //first need to mine the block and put some effort in
         newBlock.mineBlock(difficulty);
         blockchain.add(newBlock);
         newBlock.setHeight(newBlock.getHeight() + 1);
@@ -114,7 +95,7 @@ public class PeerConnection implements Runnable {
     }
 
 
-    //method to update the blockchain
+        //method to update the blockchain
     public void updateBlockchain(ArrayList<Block> blockchain){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");
@@ -129,6 +110,8 @@ public class PeerConnection implements Runnable {
 
 
 /*
+    Guess we don't need that anymore ?!
+
         //opening a server for the super peer
     public  void superServer() throws IOException, ClassNotFoundException {
         Object o = Object

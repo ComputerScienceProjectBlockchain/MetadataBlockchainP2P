@@ -13,6 +13,5 @@
         <TextField fx:id="textFieldPath" />
         <Button mnemonicParsing="false" onAction="#sendData" text="Add to blockchain" />
       <Button mnemonicParsing="false" onAction="#viewBlockchain" text="View blockchain" />
-      <Button mnemonicParsing="false" onAction="#connectToSuper" text="Connect to Superpeer" />
     </children>
 </FlowPane>

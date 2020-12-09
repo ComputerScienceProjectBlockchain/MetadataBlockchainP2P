@@ -2,14 +2,12 @@ package sample;
 
 import javafx.scene.control.*;
 import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
 
 
 public class Controller {
         //controller class for a usual JavaFX application
 
-    public static ArrayList<Block> blockchain = new ArrayList<>();
     Peer peer;
         //text field to read the file path
     public TextField textFieldPath;
@@ -22,11 +20,22 @@ public class Controller {
       peer.connectToServer();
     }
 
+        //method to prepare a new block that is supposed to be sent
+    public void sendData() throws IOException, ClassNotFoundException {
+        if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
+            peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
+        }else {
+            System.out.println("Both username and path is needed");
+        }
+        textFieldPath.clear();
+    }
 
+        //method to view the blockchain in the run terminal
+    public void viewBlockchain() {
+        peer.viewBlockchain();
+    }
 
-
-
-        //method to delete blockchain for testing purposes
+    //method to delete blockchain for testing purposes
     public void deleteBlockchain(){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");
@@ -37,27 +46,5 @@ public class Controller {
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-        //A method for sending the blockchain over a network - this is run when you press the button
-    public void sendData() throws IOException, ClassNotFoundException {
-       //peer.sendBlockToSuper();
-        if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
-            peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
-        }else {
-            System.out.println("Both username and path is needed");
-        }
-        textFieldPath.clear();
-    }
-
-        //method to print the blockchain
-    public void viewBlockchain() {
-        //peer.viewBlockchain();
-        peer.viewBlockchain();
-    }
-
-    public void connectToSuper() throws IOException, ClassNotFoundException {
-        Peer peer = new Peer("localhost");
-        peer.connectToServer();
     }
 }

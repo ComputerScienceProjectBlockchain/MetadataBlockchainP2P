@@ -8,25 +8,27 @@ import java.util.ArrayList;
 
 //Based on program from https://gist.github.com/chatton/14110d2550126b12c0254501dde73616
 public class Server {
-    ArrayList<Block> blockchain = new ArrayList<Block>();
-    //Socket socket;
+    ArrayList<Block> blockchain;
+    InputStream inputStream;
+    ObjectInputStream objectInputStream;
 
     public Server(ArrayList<Block> blockchain) {
         this.blockchain = blockchain;
-        //this.socket = socket;
     }
 
-    public Object serverConnection() throws IOException, ClassNotFoundException {
+    public void serverConnection() throws IOException{
         ServerSocket ss = new ServerSocket(7778);
         System.out.println("Waiting for connection...");
         Socket socket = ss.accept();
         ss.close();
         // get the input stream from the connected socket
-        InputStream inputStream = socket.getInputStream();
+        this.inputStream = socket.getInputStream();
         // create a DataInputStream so we can read data from it.
-        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        this.objectInputStream = new ObjectInputStream(inputStream);
         //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
-        Object o = objectInputStream.readObject();
+    }
+    public Object receiveInput() throws IOException, ClassNotFoundException {
+        Object o = this.objectInputStream.readObject();
         if (o.equals("Entire blockchain sent") || o.equals("Is Empty")) {
             return "done";
         } else {
@@ -55,18 +57,26 @@ public class Server {
 
         //method to check if a file has been added before
         //and if so compare last accessed time and the modified time
+        //maybe move to super server ?
     public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
         if (blockchain.size() > 0) {
-            for (int i = 0; i < blockchain.size(); i++) {
-                if (blockchain.get(i).getFileTitle().equals(newBlock.getFileTitle())){
+            for (int i = 0; i < blockchain.size(); i++)
+            {
+                String fileTitle = blockchain.get(i).getFileTitle();
+                String accessedTime = blockchain.get(i).getFileAccessedTime();
+                String modifiedTime = blockchain.get(i).getFileModifiedTime();
+                if (fileTitle.equals(newBlock.getFileTitle()))
+                {
                     System.out.println("Block number " + i + " has the same name as the new file");
-                    if (!blockchain.get(i).getFileAccessedTime().equals(newBlock.getFileAccessedTime())){
+                    if (!accessedTime.equals(newBlock.getFileAccessedTime()))
+                    {
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
-                    } if (!blockchain.get(i).getFileModifiedTime().equals(newBlock.getFileModifiedTime())){
+                    } if (!modifiedTime.equals(newBlock.getFileModifiedTime()))
+                    {
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
+                    }
                 }
             }
-        }
         }
     }
 }

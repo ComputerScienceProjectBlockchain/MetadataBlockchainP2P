@@ -8,57 +8,65 @@ import java.util.ArrayList;
         //class to simulate a super peer in a P2P network
 
 public class Superpeer {
-        //private final static String ip = "localhost";
+        //port for the server of the superpeer
     private final  int port = 7777;
-        //since a super peer shares some methods with the usual peers
-        //we create a super peer as a client and add additional methods in this class
-//    private static Client superPeer;
+
         //arraylist to save ip addresses of connected peers
-    private  ArrayList<String> peers = new ArrayList<String>();
+    private  ArrayList<String> peerIP = new ArrayList<String>();
         //arraylist to save the blockchain
     private  ArrayList<Block> blockchain = new ArrayList<Block>();
 
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        //superPeer = new Client(ip, port);
-        //superPeer.setSuperPeer(true);
+    public static void main(String[] args) throws IOException {
+            //new superpeer object
         Superpeer superpeer = new Superpeer();
-        while (true) // forever
+            //server of the super peer has to keep listening for incoming peer connections
+            //therefore this while loop is necessary
+        while (true)
         {
-            //listen for peer
+                //this method listens for incoming peers
             Socket socket = superpeer.connectPeer();
+                //if there is a new connection we create a new PeerConnection object
+                //this uses the superpeer and the socket for the connected peer as input
             PeerConnection peerConnection = new PeerConnection(socket, superpeer);
-            new Thread(peerConnection).start(); // new thread begins by executing run method
-
+                //then a new thread for each peer that is incoming is started
+                //this gives the possibility to connect to several peers
+            new Thread(peerConnection).start();
         }
     }
 
+        //method where the server socket listens for incoming connections
     private Socket connectPeer() throws IOException {
         ServerSocket ss = new ServerSocket(port);
         System.out.println("ServerSocket awaiting connections...");
-        // blocking call, this will wait until a connection is attempted on this port
+            // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
+            //after a succesful connection, the server socket will be closed
         ss.close();
+            //return the socket the server socket has connected to
         return socket;
     }
 
-    //adds the ip of a peer to the arraylist
-    public void add(Socket socket) {
-        peers.add(socket.getInetAddress().toString().substring(1)); // kan blive mere elegant
+        //takes a socket as input and adds the sockets IP in the arraylist
+    public void addIP(Socket socket) {
+            //getInetAddress returns an InetAddress object
+            //getHostAddress will then return the IP as a string
+        peerIP.add(socket.getInetAddress().getHostAddress());
     }
 
 
-        //does the same as the readIP() method just for the blockchain
-        //returns an arraylist of blocks
+        //this methods reads the storage file where the blockchain is saved
+        //and returns an arraylist of blocks - the blockchain
     public  ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream("storage.txt"));
-        return (ArrayList<Block>) ois.readObject();
+        blockchain = (ArrayList<Block>) ois.readObject();
+        return blockchain;
     }
 
-
-
+        /*
+        readstorage and getblocks was basically doing the same
     public ArrayList<Block> getBlocks() throws IOException, ClassNotFoundException {
         blockchain = readStorage();
         return blockchain;
-    }
+    }*/
 }

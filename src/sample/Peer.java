@@ -1,7 +1,6 @@
 package sample;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -37,7 +36,8 @@ public class Peer{
         return socket;
     }
 
-    public Socket connectToSuper(Block block) throws IOException, ClassNotFoundException {
+        //find better name
+    public void connectToSuper(Block block) throws IOException, ClassNotFoundException {
         blockchain = readStorage();
         Socket socket = new Socket(superPeerIP, port);
         System.out.println("Connected!");
@@ -50,7 +50,6 @@ public class Peer{
         System.out.println("Sending messages to the ServerSocket");
         this.objectOutputStream.writeObject(block);
         System.out.println(block);
-        return socket;
     }
 
 
@@ -71,19 +70,11 @@ public class Peer{
         server.serverConnection();
     }
 
-   /* public Socket lookForSuper() throws IOException {
-        ServerSocket ss = new ServerSocket(7777);
-        System.out.println("ServerSocket awaiting connections...");
-        // blocking call, this will wait until a connection is attempted on this port
-        Socket socket = ss.accept();
-        return socket;
-    }*/
-
     public void connectToServer() throws IOException, ClassNotFoundException {
-           //Socket socket = lookForSuper();
         while(true) {
             Server server = new Server(blockchain);
-            Object o = server.serverConnection();
+            server.serverConnection();
+            Object o = server.receiveInput();
             if (o.equals("done")){
                 System.out.println("Entire blockchain received");
                 break;
