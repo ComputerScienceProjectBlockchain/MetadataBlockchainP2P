@@ -63,10 +63,7 @@ public class Superpeer {
         return blockchain;
     }
 
-        /*
-        readstorage and getblocks was basically doing the same
-    public ArrayList<Block> getBlocks() throws IOException, ClassNotFoundException {
-        blockchain = readStorage();
-        return blockchain;
-    }*/
+    public ArrayList<String> getPeerIP(){
+        return this.peerIP;
+    }
 }

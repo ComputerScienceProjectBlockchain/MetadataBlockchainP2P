@@ -63,17 +63,20 @@ public class PeerConnection implements Runnable {
                 this.socket.close();
             }
         } else if (o instanceof Block) {
-            System.out.println("Sending blocks");
-            this.socket = new Socket(this.socket.getInetAddress().getHostAddress(), 7778);
-            outputStream = this.socket.getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            Block block = (Block) o;
-            if (block.getPreviousHash().equals(blockchain.get(blockchain.size()-1).getHash())) {
-                addBlockToBlockchain(block);
-                objectOutputStream.writeObject(block);
-                System.out.println("Sending back block");
-            } else {
-                System.out.println("Invalid blockchain");
+            for(String peer : superpeer.getPeerIP()) {
+                System.out.println("Sending blocks to Peer: " + peer);
+                this.socket = new Socket(peer, 7778);
+                outputStream = this.socket.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                Block block = (Block) o;
+                if (block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())) {
+                    addBlockToBlockchain(block);
+                    objectOutputStream.writeObject(block);
+                    System.out.println("Sending back block");
+                } else {
+                    System.out.println("Invalid blockchain");
+                }
+                this.socket.close();
             }
         }
     }
