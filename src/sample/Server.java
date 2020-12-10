@@ -12,21 +12,28 @@ public class Server {
     InputStream inputStream;
     ObjectInputStream objectInputStream;
 
+        //constructor for a server
     public Server(ArrayList<Block> blockchain) {
         this.blockchain = blockchain;
     }
 
+        //method that opens a server socket and listens for incoming peers and messages
     public void serverConnection() throws IOException{
         ServerSocket ss = new ServerSocket(7778);
         System.out.println("Waiting for connection...");
+            // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
+            //after succesful connection we close the server socket
         ss.close();
-        // get the input stream from the connected socket
+            // get the input stream from the connected socket
         this.inputStream = socket.getInputStream();
-        // create a DataInputStream so we can read data from it.
+            // create a DataInputStream so we can read data from it.
         this.objectInputStream = new ObjectInputStream(inputStream);
-        //ArrayList<Block> blockchain = (ArrayList<Block>) objectInputStream.readObject();
     }
+
+            //method to check what kind of object has been received
+            //if it is one of the two strings then we break the while loop in the connectToServer method in peer
+            //else a block was received
     public Object receiveInput() throws IOException, ClassNotFoundException {
         Object o = this.objectInputStream.readObject();
         if (o.equals("Entire blockchain sent") || o.equals("Is Empty")) {
@@ -43,7 +50,7 @@ public class Server {
         }
     }
 
-
+        //method to update the storage file
     public void saveBlockchain(){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");

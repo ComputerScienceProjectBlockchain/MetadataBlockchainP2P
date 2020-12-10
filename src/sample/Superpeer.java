@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Superpeer {
         //port for the server of the superpeer
-    private final  int port = 7777;
+    private final int port = 7777;
 
         //arraylist to save ip addresses of connected peers
     private  ArrayList<String> peerIP = new ArrayList<String>();

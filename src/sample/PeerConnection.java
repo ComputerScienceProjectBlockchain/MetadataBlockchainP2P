@@ -8,7 +8,7 @@ import java.util.ArrayList;
     //for each incoming peer we will have a new thread
 public class PeerConnection implements Runnable {
 
-    Socket socket;  //Superpeer socket ?
+    Socket socket;
     private Superpeer superpeer;
     InputStream inputStream;
     OutputStream outputStream;
