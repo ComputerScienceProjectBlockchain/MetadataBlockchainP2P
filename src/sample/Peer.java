@@ -83,10 +83,11 @@ public class Peer{
         //this message came from the super peer and means that the peer now has the latest version of the blockchain
     public void connectToServer() throws IOException, ClassNotFoundException {
         while(true) {
+            System.out.println("Connecting to server");
             Server server = new Server(blockchain);
-            Object o = server.serverConnection();
+            Boolean bool = server.serverConnection();
                 //if method to get out of the while loop
-            if (o.equals("done")){
+            if (bool == true){
                 System.out.println("Entire blockchain received");
                 break;
             }

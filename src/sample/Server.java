@@ -18,7 +18,7 @@ public class Server {
     }
 
         //method that opens a server socket and listens for incoming peers and messages
-    public Object serverConnection() throws IOException, ClassNotFoundException {
+    public boolean serverConnection() throws IOException, ClassNotFoundException {
         ServerSocket ss = new ServerSocket(7778);
         System.out.println("Waiting for connection...");
             // blocking call, this will wait until a connection is attempted on this port
@@ -35,10 +35,10 @@ public class Server {
             //method to check what kind of object has been received
             //if it is one of the two strings then we break the while loop in the connectToServer method in peer
             //else a block was received
-    public Object receiveInput() throws IOException, ClassNotFoundException {
+    public boolean receiveInput() throws IOException, ClassNotFoundException {
         Object o = this.objectInputStream.readObject();
         if (o.equals("Entire blockchain sent") || o.equals("Is Empty")) {
-            return "done";
+            return true;
         } else {
             Block block = (Block) o;
             //compare method to check if the file name already appears in the blockchain
@@ -47,7 +47,7 @@ public class Server {
             //empty or the last hash of the blockchain is the same as the previous hash of the new block
             blockchain.add(block);
             saveBlockchain();
-            return block;
+            return false;
         }
     }
 

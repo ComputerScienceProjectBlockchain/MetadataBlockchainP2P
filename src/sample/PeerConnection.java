@@ -43,28 +43,29 @@ public class PeerConnection implements Runnable {
         sendBlocks(receiveBlocks());
     }
 
+    public ObjectOutputStream prepareObjectOutputStream() throws IOException {
+        this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+        outputStream = this.socket.getOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        return objectOutputStream;
+    }
+
         //we should probably split this method in several methods
     public void sendBlocks(Object o) throws IOException{
         if (o instanceof Integer) {
             Integer index = (Integer) o;
             if (blockchain.isEmpty()) {
-                this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
-                outputStream = this.socket.getOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
                 System.out.println("Blockchain is empty");
                 objectOutputStream.writeObject("Is Empty");
             } else {
                 for (int i = index; i < blockchain.size(); i++) {
-                    this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
-                    outputStream = this.socket.getOutputStream();
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                    ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
                     System.out.println("blockchain length:" + blockchain.size());
                     objectOutputStream.writeObject(blockchain.get(i));
                     System.out.println(blockchain.get(i));
                 }
-                this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
-                outputStream = this.socket.getOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
                 objectOutputStream.writeObject("Entire blockchain sent");
                 System.out.println("Entire blockchain sent");
                 this.socket.close();
