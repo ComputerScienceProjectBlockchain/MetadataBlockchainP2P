@@ -45,11 +45,10 @@ public class PeerConnection implements Runnable {
 
         //we should probably split this method in several methods
     public void sendBlocks(Object o) throws IOException{
-        System.out.println("Sending blocks");
-        Socket socket1 = new Socket(socket.getInetAddress().getHostAddress(), 7778);
-        outputStream = socket1.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         if (o instanceof Integer) {
+            this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+            outputStream = this.socket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             Integer index = (Integer) o;
             if (blockchain.isEmpty()) {
                 System.out.println("Blockchain is empty");
@@ -61,9 +60,13 @@ public class PeerConnection implements Runnable {
                     System.out.println(blockchain.get(i));
                 }
                 objectOutputStream.writeObject("Entire blockchain sent");
-                socket1.close();
+                this.socket.close();
             }
         } else if (o instanceof Block) {
+            System.out.println("Sending blocks");
+            this.socket = new Socket(this.socket.getInetAddress().getHostAddress(), 7778);
+            outputStream = this.socket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             Block block = (Block) o;
             if (block.getPreviousHash().equals(blockchain.get(blockchain.size()-1).getHash())) {
                 addBlockToBlockchain(block);
