@@ -46,40 +46,50 @@ public class PeerConnection implements Runnable {
         //we should probably split this method in several methods
     public void sendBlocks(Object o) throws IOException{
         if (o instanceof Integer) {
-            this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
-            outputStream = this.socket.getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             Integer index = (Integer) o;
             if (blockchain.isEmpty()) {
+                this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+                outputStream = this.socket.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 System.out.println("Blockchain is empty");
                 objectOutputStream.writeObject("Is Empty");
             } else {
                 for (int i = index; i < blockchain.size(); i++) {
+                    this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+                    outputStream = this.socket.getOutputStream();
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                     System.out.println("blockchain length:" + blockchain.size());
                     objectOutputStream.writeObject(blockchain.get(i));
                     System.out.println(blockchain.get(i));
                 }
+                this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+                outputStream = this.socket.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject("Entire blockchain sent");
+                System.out.println("Entire blockchain sent");
                 this.socket.close();
             }
         } else if (o instanceof Block) {
+            Block block = (Block) o;
+            if (block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())) {
+                addBlockToBlockchain(block);
             for(String peer : superpeer.getPeerIP()) {
                 System.out.println("Sending blocks to Peer: " + peer);
-                this.socket = new Socket(peer, 7778);
-                outputStream = this.socket.getOutputStream();
+                Socket peerSocket = new Socket(peer, 7778);
+                System.out.println("Bob");
+                outputStream = peerSocket.getOutputStream();
+                System.out.println("Unicorn");
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                Block block = (Block) o;
-                if (block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())) {
-                    addBlockToBlockchain(block);
-                    objectOutputStream.writeObject(block);
-                    System.out.println("Sending back block");
-                } else {
+                System.out.println("Bla");
+                objectOutputStream.writeObject(block);
+                System.out.println("Sending back block");
+                //peerSocket.close();
+                }
+            } else {
                     System.out.println("Invalid blockchain");
                 }
-                this.socket.close();
             }
         }
-    }
 
         //method to receive the number of blocks a peer has
         //with that the super peer can check if the peer missed to receive some blocks

@@ -84,8 +84,7 @@ public class Peer{
     public void connectToServer() throws IOException, ClassNotFoundException {
         while(true) {
             Server server = new Server(blockchain);
-            server.serverConnection();
-            Object o = server.receiveInput();
+            Object o = server.serverConnection();
                 //if method to get out of the while loop
             if (o.equals("done")){
                 System.out.println("Entire blockchain received");

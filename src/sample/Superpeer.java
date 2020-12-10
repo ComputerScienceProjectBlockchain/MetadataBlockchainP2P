@@ -49,9 +49,13 @@ public class Superpeer {
 
         //takes a socket as input and adds the sockets IP in the arraylist
     public void addIP(Socket socket) {
+        if (!peerIP.contains(socket.getInetAddress().getHostAddress())) {
             //getInetAddress returns an InetAddress object
             //getHostAddress will then return the IP as a string
-        peerIP.add(socket.getInetAddress().getHostAddress());
+            peerIP.add(socket.getInetAddress().getHostAddress());
+        } else {
+            System.out.println("Peer already in arrayList");
+        }
     }
 
 

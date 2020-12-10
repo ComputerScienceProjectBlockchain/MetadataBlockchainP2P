@@ -18,7 +18,7 @@ public class Server {
     }
 
         //method that opens a server socket and listens for incoming peers and messages
-    public void serverConnection() throws IOException{
+    public Object serverConnection() throws IOException, ClassNotFoundException {
         ServerSocket ss = new ServerSocket(7778);
         System.out.println("Waiting for connection...");
             // blocking call, this will wait until a connection is attempted on this port
@@ -29,6 +29,7 @@ public class Server {
         this.inputStream = socket.getInputStream();
             // create a DataInputStream so we can read data from it.
         this.objectInputStream = new ObjectInputStream(inputStream);
+        return receiveInput();
     }
 
             //method to check what kind of object has been received
