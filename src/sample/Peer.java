@@ -103,16 +103,6 @@ public class Peer{
         return (ArrayList<Block>) ois.readObject();
     }
 
-
-    //A method which adds blocks to the blockchain
-    public void addBlockToBlockchain(Block newBlock) {
-        //first need to mine the block and put some effort in
-        newBlock.mineBlock(difficulty);
-        blockchain.add(newBlock);
-        newBlock.setHeight(newBlock.getHeight()+1);
-        System.out.println("Block version number: "+newBlock.getHeight());
-    }
-
         //method to view the blockchain in the terminal
     public void viewBlockchain() {
         if (blockchain.isEmpty()) {
@@ -126,14 +116,3 @@ public class Peer{
 
 
 }
-
-/*
-//check blocks already have been added
-        if (blockchain.isEmpty()){
-            objectOutputStream.writeObject("No blockchain");
-        } else {
-            //if not empty send the last block of the blockchain
-            objectOutputStream.writeObject(blockchain.get(blockchain.size() - 1));
-            System.out.println(blockchain.get(blockchain.size()-1));
-        }
- */
