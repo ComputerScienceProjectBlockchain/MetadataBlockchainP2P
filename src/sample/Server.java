@@ -23,7 +23,7 @@ public class Server {
         System.out.println("Waiting for connection...");
             // blocking call, this will wait until a connection is attempted on this port
         Socket socket = ss.accept();
-            //after succesful connection we close the server socket
+            //after successful connection we close the server socket
         ss.close();
             // get the input stream from the connected socket
         this.inputStream = socket.getInputStream();
