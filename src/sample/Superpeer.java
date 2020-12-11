@@ -65,4 +65,4 @@ public class Superpeer {
         blockchain = (ArrayList<Block>) ois.readObject();
         return blockchain;
     }
-}
+}   

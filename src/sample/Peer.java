@@ -18,6 +18,21 @@ public class Peer{
         this.superPeerIP = superPeerIP;
         this.socket = connectToSuper();
     }
+
+    //while loop will run until the server receives the message  "done"
+    //this message came from the super peer and means that the peer now has the latest version of the blockchain
+    public void connectToServer() throws IOException, ClassNotFoundException {
+        while(true) {
+            System.out.println("Connecting to server");
+            Server server = new Server(blockchain);
+            Boolean bool = server.serverConnection();
+            //if method to get out of the while loop
+            if (bool == true){
+                System.out.println("Entire blockchain received");
+                break;
+            }
+        }
+    }
             //method to connect the peer to the super peer
     public Socket connectToSuper() throws IOException, ClassNotFoundException {
             //read the storage txt file and save the blockchain it contains
@@ -79,20 +94,6 @@ public class Peer{
         Server server = new Server(blockchain);
         server.serverConnection();
     }
-        //while loop will run until the server receives the message  "done"
-        //this message came from the super peer and means that the peer now has the latest version of the blockchain
-    public void connectToServer() throws IOException, ClassNotFoundException {
-        while(true) {
-            System.out.println("Connecting to server");
-            Server server = new Server(blockchain);
-            Boolean bool = server.serverConnection();
-                //if method to get out of the while loop
-            if (bool == true){
-                System.out.println("Entire blockchain received");
-                break;
-            }
-        }
-    }
 
         //method to read the "storage" file where the blockchain is stored
         //returns an arraylist containing the blockchain
@@ -104,7 +105,8 @@ public class Peer{
     }
 
         //method to view the blockchain in the terminal
-    public void viewBlockchain() {
+    public void viewBlockchain() throws IOException, ClassNotFoundException {
+        blockchain = readStorage();
         if (blockchain.isEmpty()) {
             System.out.println("No blockchain to view");
         } else {
