@@ -37,7 +37,7 @@ public class Controller {
 
         //method to view the blockchain in the run terminal
         //is that really necessary ?
-    public void viewBlockchain() {
+    public void viewBlockchain() throws IOException, ClassNotFoundException {
       peer.viewBlockchain();
     }
 
