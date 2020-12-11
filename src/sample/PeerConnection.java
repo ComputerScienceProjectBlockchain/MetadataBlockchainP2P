@@ -74,9 +74,9 @@ public class PeerConnection implements Runnable {
             Block block = (Block) o;
             if (block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())) {
                 addBlockToBlockchain(block);
-            for(String peer : superpeer.getPeerIP()) {
-                System.out.println("Sending blocks to Peer: " + peer);
-                Socket peerSocket = new Socket(peer, 7778);
+            //for(String peer : superpeer.getPeerIP()) {
+                System.out.println("Sending blocks to Peer: " + socket.getInetAddress().getHostAddress());
+                Socket peerSocket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
                 System.out.println("Bob");
                 outputStream = peerSocket.getOutputStream();
                 System.out.println("Unicorn");
@@ -84,13 +84,13 @@ public class PeerConnection implements Runnable {
                 System.out.println("Bla");
                 objectOutputStream.writeObject(block);
                 System.out.println("Sending back block");
-                //peerSocket.close();
+                peerSocket.close();
                 }
             } else {
                     System.out.println("Invalid blockchain");
                 }
             }
-        }
+        //}
 
         //method to receive the number of blocks a peer has
         //with that the super peer can check if the peer missed to receive some blocks

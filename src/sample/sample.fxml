@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="446.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="89.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0" prefWidth="357.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="185.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="234.0" minHeight="0.0" prefHeight="47.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="236.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+    </rowConstraints>
     <children>
-      <Label text="Username: " />
-      <TextField fx:id="textFieldUser" />
-        <Label text="Path of file: " />
-        <TextField fx:id="textFieldPath" />
-        <Button mnemonicParsing="false" onAction="#sendData" text="Add to blockchain" />
-      <Button mnemonicParsing="false" onAction="#viewBlockchain" text="View blockchain" />
+        <Label text="Username:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+        <Label prefHeight="17.0" prefWidth="70.0" text="Path to file:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+        <TextField fx:id="textFieldUser" prefHeight="27.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="textFieldPath" prefHeight="27.0" prefWidth="315.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="168.0" text="Add to blockchain" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="162.0" text="View blockchain" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets right="10.0" />
+            </GridPane.margin>
+        </Button>
     </children>
-</FlowPane>
+</GridPane>

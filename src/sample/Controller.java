@@ -23,7 +23,7 @@ public class Controller {
 
         //method to prepare a new block that is supposed to be sent
     public void sendData() throws IOException, ClassNotFoundException {
-        if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
+      if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
                 //prepare a new block based on the input in the text fields of the GUI
             Block block = peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
                 //send the prepared block to the super peer
@@ -38,7 +38,7 @@ public class Controller {
         //method to view the blockchain in the run terminal
         //is that really necessary ?
     public void viewBlockchain() {
-        peer.viewBlockchain();
+      peer.viewBlockchain();
     }
 
         //method to delete blockchain for testing purposes
