@@ -18,37 +18,53 @@ public class Server {
     }
 
         //method that opens a server socket and listens for incoming peers and messages
-    public boolean serverConnection() throws IOException, ClassNotFoundException {
-        ServerSocket ss = new ServerSocket(7778);
-        System.out.println("Waiting for connection...");
-            // blocking call, this will wait until a connection is attempted on this port
-        Socket socket = ss.accept();
-            //after successful connection we close the server socket
-        ss.close();
-            // get the input stream from the connected socket
-        this.inputStream = socket.getInputStream();
-            // create a DataInputStream so we can read data from it.
-        this.objectInputStream = new ObjectInputStream(inputStream);
+    public boolean serverConnection(){
+        ServerSocket ss = null;
+        Socket socket = null;
+        do {
+            try {
+                ss = new ServerSocket(7778);
+                System.out.println("Waiting for connection...");
+                // blocking call, this will wait until a connection is attempted on this port
+                socket = ss.accept();
+                //after successful connection we close the server socket
+                ss.close();
+                // get the input stream from the connected socket
+                this.inputStream = socket.getInputStream();
+                // create a DataInputStream so we can read data from it.
+                this.objectInputStream = new ObjectInputStream(inputStream);
+            } catch (IOException i) {
+                i.printStackTrace();
+                System.out.println("No server socket available, or no connection with incoming requests. \nTrying again..");
+            }
+        }while(ss != null && socket != null);
         return receiveInput();
     }
 
             //method to check what kind of object has been received
             //if it is one of the two strings then we break the while loop in the connectToServer method in peer
             //else a block was received
-    public boolean receiveInput() throws IOException, ClassNotFoundException {
-        Object o = this.objectInputStream.readObject();
-        if (o.equals("Entire blockchain sent") || o.equals("Is Empty")) {
-            return true;
-        } else {
-            Block block = (Block) o;
-            //compare method to check if the file name already appears in the blockchain
-            compareBlocks(blockchain, block);
-            //will only add block to blockchain if the blockchain is either
-            //empty or the last hash of the blockchain is the same as the previous hash of the new block
-            blockchain.add(block);
-            saveBlockchain();
-            return false;
-        }
+    public boolean receiveInput() {
+        Object o = null;
+        do {
+            try {
+                o = this.objectInputStream.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (o.equals("Entire blockchain sent") || o.equals("Is Empty")) {
+                return true;
+            } else {
+                Block block = (Block) o;
+                //compare method to check if the file name already appears in the blockchain
+                compareBlocks(blockchain, block);
+                //will only add block to blockchain if the blockchain is either
+                //empty or the last hash of the blockchain is the same as the previous hash of the new block
+                blockchain.add(block);
+                saveBlockchain();
+                return false;
+            }
+        }while(o == null);
     }
 
         //method to update the storage file

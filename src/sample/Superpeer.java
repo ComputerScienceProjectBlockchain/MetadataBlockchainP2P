@@ -35,13 +35,23 @@ public class Superpeer {
     }
 
     //method where the server socket listens for incoming connections
-    private Socket connectPeer() throws IOException {
-        ServerSocket ss = new ServerSocket(port);
-        System.out.println("ServerSocket awaiting connections...");
-        // blocking call, this will wait until a connection is attempted on this port
-        Socket socket = ss.accept();
-        //after a succesful connection, the server socket will be closed
-        ss.close();
+    private Socket connectPeer() {
+        Socket socket = null;
+        //do while loop, so that the try block will be executed until we have a socket we can return
+        do {
+            try {
+                ServerSocket ss = new ServerSocket(port);
+                System.out.println("ServerSocket awaiting connections...");
+                // blocking call, this will wait until a connection is attempted on this port
+                socket = ss.accept();
+                //after a succesful connection, the server socket will be closed
+                ss.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Not able to initialize a server socket. \n Trying again...");
+            }
+        }
+        while(socket == null);
         //return the socket the server socket has connected to
         return socket;
     }
@@ -60,9 +70,17 @@ public class Superpeer {
 
     //this methods reads the storage file where the blockchain is saved
     //and returns an arraylist of blocks - the blockchain
-    public ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("storage.txt"));
-        blockchain = (ArrayList<Block>) ois.readObject();
+    public ArrayList<Block> readStorage() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("storage.txt"));
+            blockchain = (ArrayList<Block>) ois.readObject();
+        } catch (FileNotFoundException f) {
+            f.printStackTrace();
+            System.out.println("There is no such file available.");
+        } catch (IOException | ClassNotFoundException i){
+            i.printStackTrace();
+            System.out.println("No such Output stream available, therefore there is no object to read.");
+        }
         return blockchain;
     }
 }   

@@ -15,7 +15,7 @@ public class Controller {
     public TextField textFieldUser;
 
 
-  public void initialize() throws IOException, ClassNotFoundException {
+  public void initialize() {
         //we need to remember to mention why we just make a new peer here, not a super peer
       this.peer = new Peer("localhost");
       peer.connectToServer();
