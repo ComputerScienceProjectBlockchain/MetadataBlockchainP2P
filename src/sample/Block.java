@@ -9,7 +9,6 @@ public class Block implements Serializable {
 
     private String hash;
     private final String previousHash;
-
     private final String fileTitle;
     private final String fileCreatedTime;
     private final String fileAccessedTime;

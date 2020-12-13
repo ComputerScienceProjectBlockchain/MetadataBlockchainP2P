@@ -34,10 +34,11 @@ public class Superpeer {
         }
     }
 
-    //method where the server socket listens for incoming connections
+    //method where the serversocket listens for incoming connections
     private Socket connectPeer() {
         Socket socket = null;
-        //do while loop, so that the try block will be executed until we have a socket we can return
+        //do while loop, so that the try block will be executed until
+        //there is a connection to a socket
         do {
             try {
                 ServerSocket ss = new ServerSocket(port);
@@ -52,7 +53,7 @@ public class Superpeer {
             }
         }
         while(socket == null);
-        //return the socket the server socket has connected to
+        //return the socket the serversocket has connected to
         return socket;
     }
 

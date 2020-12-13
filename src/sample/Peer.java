@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Peer{
     String superPeerIP;
     int port = 7777;
-    public static int difficulty = 2;
     ArrayList<Block> blockchain = new ArrayList<Block>();
     Socket socket;
     OutputStream outputStream;
@@ -19,7 +18,7 @@ public class Peer{
         this.socket = connectToSuper();
     }
 
-    //while loop will run until the server receives the message  "done"
+    //while loop will run until the server receives the message "done"
     //this message came from the super peer and means that the peer now has the latest version of the blockchain
     public void connectToServer(){
         while(true) {
@@ -38,6 +37,8 @@ public class Peer{
         Socket socket =null;
             //read the storage txt file and save the blockchain it contains
             //make a new socket with the ip of the super peer and a port
+        //a do-while loop was added, so that if we catch an exception, the program will try again
+        //until the socket is not null anymore
         do{
             try {
                 blockchain = readStorage();
@@ -69,8 +70,8 @@ public class Peer{
             //does the same as the other connectToSuper method
             //the only thing that differs is the this method send a block instead of the size of the blockchain
     public void connectToSuper(Block block) {
-
         Socket socket = null;
+        //here we also added a do-while loop in order to not exit the program when we catch an exception
         do {
             try {
                 blockchain = readStorage();
@@ -100,6 +101,7 @@ public class Peer{
     public Block prepareBlock(String userName, String path){
             //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
         Block block = null;
+        //do-while loop that first stops when we successfully retrieved metadata
         do {
             try {
                 if (blockchain.isEmpty()) {
@@ -137,6 +139,7 @@ public class Peer{
         //method to view the blockchain in the terminal
     public void viewBlockchain() {
         try {
+            //read out the latest version of the txt-file
             blockchain = readStorage();
         }catch(IOException i){
             i.printStackTrace();
@@ -148,6 +151,8 @@ public class Peer{
         if (blockchain.isEmpty()) {
             System.out.println("No blockchain to view");
         } else {
+            //StringUtil.getJson is a method that uses "PrettyPrinting"
+            //can be used to write our blocks in nice form
             String blockchainJson = StringUtil.getJson(blockchain);
             System.out.println("\nThe block chain: ");
             System.out.println(blockchainJson);

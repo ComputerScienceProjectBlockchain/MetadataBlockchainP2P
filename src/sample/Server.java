@@ -19,14 +19,11 @@ public class Server {
 
         //method that opens a server socket and listens for incoming peers and messages
     public boolean serverConnection(){
-        ServerSocket ss = null;
-        Socket socket = null;
-        do {
             try {
-                ss = new ServerSocket(7778);
+                ServerSocket ss = new ServerSocket(7778);
                 System.out.println("Waiting for connection...");
                 // blocking call, this will wait until a connection is attempted on this port
-                socket = ss.accept();
+                Socket socket = ss.accept();
                 //after successful connection we close the server socket
                 ss.close();
                 // get the input stream from the connected socket
@@ -37,7 +34,6 @@ public class Server {
                 i.printStackTrace();
                 System.out.println("No server socket available, or no connection with incoming requests. \nTrying again..");
             }
-        }while(ss != null && socket != null);
         return receiveInput();
     }
 
@@ -45,7 +41,10 @@ public class Server {
             //if it is one of the two strings then we break the while loop in the connectToServer method in peer
             //else a block was received
     public boolean receiveInput() {
-        Object o = null;
+        //we need to initialize the object outside the try-catch statement
+        //so the do-while loop makes sure that we don't return a "null" object
+        //which would give us a nullpointerexception
+        Object o = "null";
         do {
             try {
                 o = this.objectInputStream.readObject();
@@ -64,7 +63,7 @@ public class Server {
                 saveBlockchain();
                 return false;
             }
-        }while(o == null);
+        }while (o.equals("null")) ;
     }
 
         //method to update the storage file
@@ -81,7 +80,6 @@ public class Server {
 
         //method to check if a file has been added before
         //and if so compare last accessed time and the modified time
-        //maybe move to super server ?
     public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
         if (blockchain.size() > 0) {
             for (int i = 0; i < blockchain.size(); i++)
@@ -89,12 +87,15 @@ public class Server {
                 String fileTitle = blockchain.get(i).getFileTitle();
                 String accessedTime = blockchain.get(i).getFileAccessedTime();
                 String modifiedTime = blockchain.get(i).getFileModifiedTime();
+                    //check if the newfile has been added before
                 if (fileTitle.equals(newBlock.getFileTitle()))
                 {
                     System.out.println("Block number " + i + " has the same name as the new file");
+                        //check if the time when the file was last accessed is the same
                     if (!accessedTime.equals(newBlock.getFileAccessedTime()))
                     {
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
+                        //check if the time of last modification is the same
                     } if (!modifiedTime.equals(newBlock.getFileModifiedTime()))
                     {
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
