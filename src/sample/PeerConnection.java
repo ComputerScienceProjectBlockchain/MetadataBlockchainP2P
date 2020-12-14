@@ -81,7 +81,8 @@ public class PeerConnection implements Runnable {
     public void sendNewBlock(Block block) throws IOException{
             //first we need to check if the block the super peer received
             //has the correct previous hash. The previous hash must be equal to the hash
-            //of the previous block
+            //of the previous block or the blockchain is empty -
+            // if it is empty then there is no previous hash to compare with
         if (blockchain.isEmpty()||block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())){
             //block gets add to the blockchain
             addBlockToBlockchain(block);
