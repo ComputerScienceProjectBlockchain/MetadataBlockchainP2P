@@ -14,74 +14,74 @@ public class PeerConnection implements Runnable {
     private static int difficulty = 2;
     private ArrayList<Block> blockchain = new ArrayList<>();
 
+    //exceptions passed on from establishStreams
     @Override
-        //exceptions passed on from establishStreams
     public void run() {
         establishStreams();
-
     }
 
-        //new constructor which takes the socket of the peer
-        //and the super peer as input
+    //new constructor which takes the socket of the peer
+    //and the super peer as input
     public PeerConnection(Socket socket, Superpeer superpeer) {
         this.socket = socket;
         this.superpeer = superpeer;
     }
 
-        //Exceptions are passed on from receiveBlocks
+    //Exceptions are passed on from receiveBlocks
     private void establishStreams() {
-            //add the socket IP to the super peers arraylist
+        //add the socket IP to the super peers arraylist
         superpeer.addIP(this.socket);
-            //get the latest version of the blockchain
+        //get the latest version of the blockchain
         this.blockchain = superpeer.readStorage();
-            //method to send blocks to the peer
-            //how many blocks the method sends is based on what the input is
-            //further explanation in the method
-            sendToPeer(receiveBlocks());
+        //method to send blocks to the peer
+        //how many blocks the method sends is based on what the input is
+        //further explanation in the method
+        sendToPeer(receiveBlocks());
     }
-        //method to prepare an ObjectOutputStream
-        //exception needs to be passed on, because we return an ObjectOutputStream
+
+    //method to prepare an ObjectOutputStream
+    //exception needs to be passed on, because we return an ObjectOutputStream
     private ObjectOutputStream prepareObjectOutputStream() throws IOException {
         this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
         outputStream = this.socket.getOutputStream();
         return new ObjectOutputStream(outputStream);
     }
 
-        //method to check if a peer has the same blockchain as the super peer
-        //if the received integer is smaller than the blockchain length
-        //the superpeer will send the missing blocks to the peer
+    //method to check if a peer has the same blockchain as the super peer
+    //if the received integer is smaller than the blockchain length
+    //the superpeer will send the missing blocks to the peer
     private void sendMissingBlocks(int index) throws IOException{
-            //first we need to check if the blockchain is empty
+        //first we need to check if the blockchain is empty
         if (blockchain.isEmpty()) {
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
             System.out.println("Blockchain is empty");
-                //if it is empty, we send a message to the server of the peer
+            //if it is empty, we send a message to the server of the peer
             objectOutputStream.writeObject("Is Empty");
         } else {
-                //if the blockchain is not empty, we compare the size of the blockchain of the peer
-                //with the size of the blockchain of the superpeer
-                //if the peer is missing blocks, they will be send to the peer
+            //if the blockchain is not empty, we compare the size of the blockchain of the peer
+            //with the size of the blockchain of the superpeer
+            //if the peer is missing blocks, they will be send to the peer
             for (int i = index; i < blockchain.size(); i++) {
                 ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
                 System.out.println("blockchain length:" + blockchain.size());
                 objectOutputStream.writeObject(blockchain.get(i));
                 System.out.println(blockchain.get(i));
             }
-                //after sending all blocks we send a message to the server of the peer
+            //after sending all blocks we send a message to the server of the peer
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
             objectOutputStream.writeObject("Entire blockchain sent");
             System.out.println("Entire blockchain sent");
-                //the last we do is closing the socket
+            //the last we do is closing the socket
             this.socket.close();
         }
     }
 
-        //method to send a new block to a peer
+    //method to send a new block to a peer
     private void sendNewBlock(Block block) throws IOException{
-            //first we need to check if the block the super peer received
-            //has the correct previous hash. The previous hash must be equal to the hash
-            //of the previous block or the blockchain is empty -
-            // if it is empty then there is no previous hash to compare with
+        //first we need to check if the block the super peer received
+        //has the correct previous hash. The previous hash must be equal to the hash
+        //of the previous block or the blockchain is empty -
+        // if it is empty then there is no previous hash to compare with
         if (blockchain.isEmpty()||block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())){
             //block gets add to the blockchain
             addBlockToBlockchain(block);
@@ -146,7 +146,6 @@ public class PeerConnection implements Runnable {
         return o;
     }
 
-
         //A method which adds blocks to the blockchain
     private void addBlockToBlockchain(Block newBlock) {
             //first need to mine the block and put some effort in
@@ -158,7 +157,6 @@ public class PeerConnection implements Runnable {
         //the txt-file where the blockchain is saved
         updateBlockchain(blockchain);
     }
-
 
         //method to update the txt-file where the blockchain is saved
     private void updateBlockchain(ArrayList<Block> blockchain){

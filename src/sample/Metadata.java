@@ -15,31 +15,31 @@ public class Metadata {
     String size;
 
     public Metadata(String path) throws IOException {
-            //In order to access the metadata of the file you have to use the classes
-            // Path and BasicFileAttributes
-            Path file = Paths.get(path);
-            BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-            //different attributes of a files meta data saved as a string
-            this.creationTime = String.valueOf(attr.creationTime());
-            this.lastAccessTime = String.valueOf(attr.lastAccessTime());
-            this.lastModifiedTime = String.valueOf(attr.lastModifiedTime());
-            this.size = String.valueOf(attr.size());
-            this.title = String.valueOf(file.getFileName());
+        //In order to access the metadata of the file you have to use the classes
+        // Path and BasicFileAttributes
+        Path file = Paths.get(path);
+        BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+        //different attributes of a files meta data saved as a string
+        this.creationTime = String.valueOf(attr.creationTime());
+        this.lastAccessTime = String.valueOf(attr.lastAccessTime());
+        this.lastModifiedTime = String.valueOf(attr.lastModifiedTime());
+        this.size = String.valueOf(attr.size());
+        this.title = String.valueOf(file.getFileName());
     }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public String getCreationTime() {
-            return creationTime;
-        }
-
-        public String getLastAccessTime() {
-            return lastAccessTime;
-        }
-
-        public String getLastModifiedTime() {
-            return lastModifiedTime;
-        }
+    public String getTitle() {
+        return title;
     }
+
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    public String getLastAccessTime() {
+        return lastAccessTime;
+    }
+
+    public String getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+}

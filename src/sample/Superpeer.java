@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-        //class to simulate a super peer in a P2P network
+//class to simulate a super peer in a P2P network
 
 public class Superpeer {
     //port for the server of the superpeer
@@ -15,7 +15,6 @@ public class Superpeer {
     private ArrayList<String> peerIP = new ArrayList<String>();
     //arraylist to save the blockchain
     private ArrayList<Block> blockchain = new ArrayList<Block>();
-
 
     public static void main(String[] args) throws IOException {
         //new superpeer object
@@ -67,7 +66,6 @@ public class Superpeer {
             System.out.println("Peer already in arrayList");
         }
     }
-
 
     //this methods reads the storage file where the blockchain is saved
     //and returns an arraylist of blocks - the blockchain
