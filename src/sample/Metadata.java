@@ -28,38 +28,4 @@ public class Metadata {
         this.size = String.valueOf(attr.size());
         this.title=String.valueOf(file.getFileName());
     }
-
-    //Encrypts the metadata using the applySha256 hash method
-    /*public String encryptMetadata() {
-        return StringUtil.applySha256(creationTime+lastAccessTime+lastModifiedTime+size+title);
-    }*/
-
-        //we override the toString() method so that we can visualize the data we want to have from the file
-    @Override
-    public String toString() {
-        return "Metadata{" +
-                "title='" + title + '\'' +
-                ", path='" + path + '\'' +
-                ", creationTime='" + creationTime + '\'' +
-                ", lastAccessTime='" + lastAccessTime + '\'' +
-                ", lastModifiedTime='" + lastModifiedTime + '\'' +
-                ", size='" + size + '\'' +
-                '}';
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getCreationTime() {
-        return creationTime;
-    }
-
-    public String getLastAccessTime() {
-        return lastAccessTime;
-    }
-
-    public String getLastModifiedTime() {
-        return lastModifiedTime;
-    }
 }

@@ -15,7 +15,6 @@ public class Block implements Serializable {
     private final String fileAccessedTime;
     private final String fileModifiedTime;
     private final String userName;
-    //private final String metadata;
     private final long timeStamp;           //as number of milliseconds since 1/1/1970
     private static int height;              //counting how many blocks there are in the chain
     private int miningNonce;                //nonce used for the mining, starts at 0
