@@ -36,7 +36,7 @@ public class PeerConnection implements Runnable {
         //method to send blocks to the peer
         //how many blocks the method sends is based on what the input is
         //further explanation in the method
-        sendToPeer(receiveBlocks());
+        sendToPeer(receiveObjects());
     }
 
     //method to prepare an ObjectOutputStream
@@ -123,7 +123,7 @@ public class PeerConnection implements Runnable {
 
         //method to receive length of a peers blockchain, so the number of blocks a peer has
         //with that the super peer can check if the peer missed to receive some blocks
-    private Object receiveBlocks() {
+    private Object receiveObjects() {
         //we need to initialize the object outside try-catch statement
         //therefore we had to add a do while loop, so that we first return the object when it is not "null" anymore
         Object o = "null";
