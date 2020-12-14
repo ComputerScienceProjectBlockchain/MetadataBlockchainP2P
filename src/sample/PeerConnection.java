@@ -67,7 +67,7 @@ public class PeerConnection implements Runnable {
                 System.out.println("blockchain length:" + blockchain.size());
                 objectOutputStream.writeObject(blockchain.get(i));
                 System.out.println(blockchain.get(i));
-            } 
+            }
                 //after sending all blocks we send a message to the server of the peer
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
             objectOutputStream.writeObject("Entire blockchain sent");
@@ -82,7 +82,7 @@ public class PeerConnection implements Runnable {
             //first we need to check if the block the super peer received
             //has the correct previous hash. The previous hash must be equal to the hash
             //of the previous block
-        if (block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())) {
+        if (blockchain.isEmpty()||block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())){
             //block gets add to the blockchain
             addBlockToBlockchain(block);
             //for(String peer : superpeer.getPeerIP()) {

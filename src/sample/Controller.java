@@ -17,6 +17,7 @@ public class Controller {
     //initialize is the first method that will be called from the FX application
     //so before opening the GUI, we uses the initialize method to update a peers blockchain when connecting to superpeer
   public void initialize() {
+      deleteBlockchain();
       this.peer = new Peer("localhost");
       peer.connectToServer();
     }
