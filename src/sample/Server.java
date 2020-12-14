@@ -8,9 +8,8 @@ import java.util.ArrayList;
 
 //Based on program from https://gist.github.com/chatton/14110d2550126b12c0254501dde73616
 public class Server {
-    ArrayList<Block> blockchain;
-    InputStream inputStream;
-    ObjectInputStream objectInputStream;
+    private final ArrayList<Block> blockchain;
+    private ObjectInputStream objectInputStream;
 
         //constructor for a server
     public Server(ArrayList<Block> blockchain) {
@@ -27,7 +26,7 @@ public class Server {
                 //after successful connection we close the server socket
                 ss.close();
                 // get the input stream from the connected socket
-                this.inputStream = socket.getInputStream();
+                InputStream inputStream = socket.getInputStream();
                 // create a DataInputStream so we can read data from it.
                 this.objectInputStream = new ObjectInputStream(inputStream);
             } catch (IOException i) {
