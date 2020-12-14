@@ -23,6 +23,8 @@ public class Controller {
 
         //method to prepare a new block that is supposed to be sent
     public void sendData(){
+      peer.connectToSuper();
+      peer.connectToServer();
         //we need to be sure that a file path and a user name was added
       if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
                 //prepare a new block based on the input in the text fields of the GUI

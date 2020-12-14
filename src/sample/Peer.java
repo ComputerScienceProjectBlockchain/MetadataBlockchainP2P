@@ -32,7 +32,7 @@ public class Peer{
         }
     }
             //method to connect the peer to the super peer
-    private void connectToSuper(){
+            public void connectToSuper(){
         Socket socket =null;
             //read the storage txt file and save the blockchain it contains
             //make a new socket with the ip of the super peer and a port
