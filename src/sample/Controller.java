@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Controller {
         //controller class for a usual JavaFX application
 
-    Peer peer;
+    private Peer peer;
         //text field to read the file path
     public TextField textFieldPath;
     //text field to read the user name
@@ -26,9 +26,14 @@ public class Controller {
         //we need to be sure that a file path and a user name was added
       if (!textFieldPath.getText().isBlank() && !textFieldUser.getText().isBlank()) {
                 //prepare a new block based on the input in the text fields of the GUI
-            Block block = peer.prepareBlock(textFieldUser.getText(),textFieldPath.getText());
-                //send the prepared block to the super peer
-            peer.sendBlock(block);
+              try {
+                  Block block = peer.prepareBlock(textFieldUser.getText(), textFieldPath.getText());
+                  //send the prepared block to the super peer
+                  System.out.println(block.getFileTitle());
+                  peer.sendBlock(block);
+              } catch (IOException e) {
+                  System.out.println("No such file available. Please try again..");
+              }
         }else {
             System.out.println("Both username and path is needed");
         }

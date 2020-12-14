@@ -8,12 +8,11 @@ import java.util.ArrayList;
     //for each incoming peer we will have a new thread
 public class PeerConnection implements Runnable {
 
-    Socket socket;
-    private Superpeer superpeer;
-    InputStream inputStream;
-    OutputStream outputStream;
-    public static int difficulty = 2;
-    ArrayList<Block> blockchain = new ArrayList<>();
+    private Socket socket;
+    private final Superpeer superpeer;
+    private OutputStream outputStream;
+    private static int difficulty = 2;
+    private ArrayList<Block> blockchain = new ArrayList<>();
 
     @Override
         //exceptions passed on from establishStreams
@@ -30,7 +29,7 @@ public class PeerConnection implements Runnable {
     }
 
         //Exceptions are passed on from receiveBlocks
-    public void establishStreams() {
+    private void establishStreams() {
             //add the socket IP to the super peers arraylist
         superpeer.addIP(this.socket);
             //get the latest version of the blockchain
@@ -42,7 +41,7 @@ public class PeerConnection implements Runnable {
     }
         //method to prepare an ObjectOutputStream
         //exception needs to be passed on, because we return an ObjectOutputStream
-    public ObjectOutputStream prepareObjectOutputStream() throws IOException {
+    private ObjectOutputStream prepareObjectOutputStream() throws IOException {
         this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
         outputStream = this.socket.getOutputStream();
         return new ObjectOutputStream(outputStream);
@@ -51,7 +50,7 @@ public class PeerConnection implements Runnable {
         //method to check if a peer has the same blockchain as the super peer
         //if the received integer is smaller than the blockchain length
         //the superpeer will send the missing blocks to the peer
-    public void sendMissingBlocks(int index) throws IOException{
+    private void sendMissingBlocks(int index) throws IOException{
             //first we need to check if the blockchain is empty
         if (blockchain.isEmpty()) {
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
@@ -78,7 +77,7 @@ public class PeerConnection implements Runnable {
     }
 
         //method to send a new block to a peer
-    public void sendNewBlock(Block block) throws IOException{
+    private void sendNewBlock(Block block) throws IOException{
             //first we need to check if the block the super peer received
             //has the correct previous hash. The previous hash must be equal to the hash
             //of the previous block or the blockchain is empty -
@@ -101,7 +100,7 @@ public class PeerConnection implements Runnable {
     }
 
         //this method uses either sendMissingBlocks or sendNewBlock based of what instance the object is
-    public void sendToPeer(Object o) {
+    private void sendToPeer(Object o) {
         try {
             if (o instanceof Integer) {
                 //if the object is an Integer, then we know that the input is the length of a peers blockchain
@@ -124,14 +123,14 @@ public class PeerConnection implements Runnable {
 
         //method to receive length of a peers blockchain, so the number of blocks a peer has
         //with that the super peer can check if the peer missed to receive some blocks
-    public Object receiveBlocks() {
+    private Object receiveBlocks() {
         //we need to initialize the object outside try-catch statement
         //therefore we had to add a do while loop, so that we first return the object when it is not "null" anymore
         Object o = "null";
         do {
             try {
                 System.out.println("Receiving blocks");
-                inputStream = socket.getInputStream();
+                InputStream inputStream = socket.getInputStream();
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                 o = objectInputStream.readObject();
                 //we can catch two different exceptions
@@ -149,7 +148,7 @@ public class PeerConnection implements Runnable {
 
 
         //A method which adds blocks to the blockchain
-    public void addBlockToBlockchain(Block newBlock) {
+    private void addBlockToBlockchain(Block newBlock) {
             //first need to mine the block and put some effort in
         newBlock.mineBlock(difficulty);
             //add the block to the blockchain
@@ -162,7 +161,7 @@ public class PeerConnection implements Runnable {
 
 
         //method to update the txt-file where the blockchain is saved
-    public void updateBlockchain(ArrayList<Block> blockchain){
+    private void updateBlockchain(ArrayList<Block> blockchain){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");
             ObjectOutputStream oos = new ObjectOutputStream(out);

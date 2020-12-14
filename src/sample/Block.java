@@ -24,10 +24,10 @@ public class Block implements Serializable {
         //the data the should be included in the block
     public Block(Metadata metadata,String previousHash, String userName) {
             //extract meta data information from the file, which is inserted in the block
-        this.fileTitle = metadata.title;
-        this.fileCreatedTime = metadata.creationTime;
-        this.fileAccessedTime = metadata.lastAccessTime;
-        this.fileModifiedTime = metadata.lastModifiedTime;
+        this.fileTitle = metadata.getTitle();
+        this.fileCreatedTime = metadata.getCreationTime();
+        this.fileAccessedTime = metadata.getLastAccessTime();
+        this.fileModifiedTime = metadata.getLastModifiedTime();
         this.userName = userName;
             //get the hash of the previous block
         this.previousHash = previousHash;

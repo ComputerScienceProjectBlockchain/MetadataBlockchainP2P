@@ -12,24 +12,24 @@ class MetadataTest {
     @Test
     void getTitle() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("TEST.docx",metadata.title);
+        assertEquals("TEST.docx",metadata.getTitle());
     }
 
     @Test
     void getCreationTime() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("2020-12-11T15:15:37.3720663Z",metadata.creationTime);
+        assertEquals("2020-12-11T15:15:37.3720663Z",metadata.getCreationTime());
     }
 
     @Test
     void getLastAccessTime() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("2020-12-11T15:15:42.6610821Z",metadata.lastAccessTime);
+        assertEquals("2020-12-11T15:15:42.6610821Z",metadata.getLastAccessTime());
     }
 
     @Test
     void getLastModifiedTime() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("2020-12-11T15:15:37.3720663Z",metadata.lastModifiedTime);
+        assertEquals("2020-12-11T15:15:37.3720663Z",metadata.getLastModifiedTime());
     }
 }

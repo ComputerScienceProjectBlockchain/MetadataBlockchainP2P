@@ -5,17 +5,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Peer{
-    String superPeerIP;
-    int port = 7777;
-    ArrayList<Block> blockchain = new ArrayList<Block>();
-    Socket socket;
-    OutputStream outputStream;
-    ObjectOutputStream objectOutputStream;
+    private final String superPeerIP;
+    private final int port = 7777;
+    private ArrayList<Block> blockchain = new ArrayList<Block>();
+    private OutputStream outputStream;
+    private ObjectOutputStream objectOutputStream;
 
 
     public Peer(String superPeerIP) {
         this.superPeerIP = superPeerIP;
-        this.socket = connectToSuper();
+        connectToSuper();
     }
 
     //while loop will run until the server receives the message "done"
@@ -33,7 +32,7 @@ public class Peer{
         }
     }
             //method to connect the peer to the super peer
-    public Socket connectToSuper(){
+    private void connectToSuper(){
         Socket socket =null;
             //read the storage txt file and save the blockchain it contains
             //make a new socket with the ip of the super peer and a port
@@ -63,13 +62,12 @@ public class Peer{
                 System.out.println("The method readStorage() had no text file to read from.");
             }
         }while(socket == null);
-        return socket;
     }
 
             //connects to the super peer and sends a block the peer wants to add to the blockchain
             //does the same as the other connectToSuper method
             //the only thing that differs is the this method send a block instead of the size of the blockchain
-    public void connectToSuper(Block block) {
+    private void connectToSuper(Block block) {
         Socket socket = null;
         //here we also added a do-while loop in order to not exit the program when we catch an exception
         do {
@@ -98,24 +96,20 @@ public class Peer{
 
             //returns a block the either is the genesis block
             //or another block that is supposed to be added to the blockchain
-    public Block prepareBlock(String userName, String path){
+    public Block prepareBlock(String userName, String path) throws IOException {
             //When the blockchain is empty, the previous hash is 0; "initialization" of genesis block
-        Block block = null;
+        Block block;
         //do-while loop that first stops when we successfully retrieved metadata
-        do {
-            try {
-                if (blockchain.isEmpty()) {
-                    //generation of a genesis block
-                    //genesis block is the first the block in a blockchain; it has no previous hash to refer to
-                    block = (new Block(new Metadata(path), "0", userName));
-                } else {
-                    block = (new Block(new Metadata(path), blockchain.get(blockchain.size() - 1).getHash(), userName));
-                }
-            } catch (IOException i) {
-                i.printStackTrace();
-                System.out.println("No Metadata available.");
-            }
-        }while(block == null);
+                   if (blockchain.isEmpty()) {
+                       //generation of a genesis block
+                       //genesis block is the first the block in a blockchain; it has no previous hash to refer to
+                       block = (new Block(new Metadata(path), "0", userName));
+                   } else {
+                       block = (new Block(new Metadata(path), blockchain.get(blockchain.size() - 1).getHash(), userName));
+                   }
+               // catch (IOException i) {
+                 //  System.out.println("No such file available..");
+                   //System.out.println("Check your path.");
         return block;
     }
 
@@ -129,7 +123,7 @@ public class Peer{
         //method to read the "storage" file where the blockchain is stored
         //returns an arraylist containing the blockchain
         //both exceptions need to be passed on because of what we return
-    public ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
+    private ArrayList<Block> readStorage() throws IOException, ClassNotFoundException {
                 //Accesses the storage file, which is where the arraylist of the blockchain is.
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream("storage.txt"));
             //Reads the storage file and lets the ArrayList blockchain be equal to this
@@ -158,6 +152,4 @@ public class Peer{
             System.out.println(blockchainJson);
         }
     }
-
-
 }

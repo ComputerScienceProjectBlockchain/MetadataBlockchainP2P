@@ -41,7 +41,7 @@ public class Server {
             //method to check what kind of object has been received
             //if it is one of the two strings then we break the while loop in the connectToServer method in peer
             //else a block was received
-    public boolean receiveInput() {
+    private boolean receiveInput() {
         //we need to initialize the object outside the try-catch statement
         //so the do-while loop makes sure that we don't return a "null" object
         //which would give us a nullpointerexception
@@ -68,7 +68,7 @@ public class Server {
     }
 
         //method to update the storage file
-    public void saveBlockchain(){
+    private void saveBlockchain(){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");
             ObjectOutputStream oos = new ObjectOutputStream(out);
@@ -81,14 +81,14 @@ public class Server {
 
         //method to check if a file has been added before
         //and if so compare last accessed time and the modified time
-    public static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
+    private static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
         if (blockchain.size() > 0) {
             for (int i = 0; i < blockchain.size(); i++)
             {
                 String fileTitle = blockchain.get(i).getFileTitle();
                 String accessedTime = blockchain.get(i).getFileAccessedTime();
                 String modifiedTime = blockchain.get(i).getFileModifiedTime();
-                    //check if the newfile has been added before
+                    //check if the new file has been added before
                 if (fileTitle.equals(newBlock.getFileTitle()))
                 {
                     System.out.println("Block number " + i + " has the same name as the new file");
