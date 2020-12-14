@@ -1,5 +1,6 @@
 package sample;
-//Based on tutorial found at https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa
+//Based on tutorial found at
+// https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa
 import java.security.MessageDigest;
 import com.google.gson.GsonBuilder;
 

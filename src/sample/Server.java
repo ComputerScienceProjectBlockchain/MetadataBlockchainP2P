@@ -32,7 +32,8 @@ public class Server {
                 this.objectInputStream = new ObjectInputStream(inputStream);
             } catch (IOException i) {
                 i.printStackTrace();
-                System.out.println("No server socket available, or no connection with incoming requests. \nTrying again..");
+                System.out.println("No server socket available, or no connection with incoming requests." +
+                        " \nTrying again..");
             }
         return receiveInput();
     }
@@ -94,11 +95,13 @@ public class Server {
                         //check if the time when the file was last accessed is the same
                     if (!accessedTime.equals(newBlock.getFileAccessedTime()))
                     {
-                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed " + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "
+                                + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
                         //check if the time of last modification is the same
                     } if (!modifiedTime.equals(newBlock.getFileModifiedTime()))
                     {
-                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified " + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified "
+                                + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
                     }
                 }
             }

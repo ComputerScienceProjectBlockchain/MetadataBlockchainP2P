@@ -67,7 +67,7 @@ public class PeerConnection implements Runnable {
                 System.out.println("blockchain length:" + blockchain.size());
                 objectOutputStream.writeObject(blockchain.get(i));
                 System.out.println(blockchain.get(i));
-            }
+            } 
                 //after sending all blocks we send a message to the server of the peer
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
             objectOutputStream.writeObject("Entire blockchain sent");

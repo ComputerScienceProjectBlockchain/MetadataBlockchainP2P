@@ -2,7 +2,8 @@ package sample;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Random;
-//Based on tutorial found at https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa
+//Based on tutorial found at
+//https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa
 public class Block implements Serializable {
         //class needs to implement the serializable interface
         //so that we are able to use input and output streams
