@@ -129,7 +129,7 @@ public class PeerConnection implements Runnable {
         Object o = "null";
         do {
             try {
-                System.out.println("Receiving blocks");
+                System.out.println("Receiving objects");
                 InputStream inputStream = socket.getInputStream();
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                 o = objectInputStream.readObject();
