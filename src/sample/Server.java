@@ -83,6 +83,7 @@ public class Server {
     //and if so compare last accessed time and the modified time
     private static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
         if (blockchain.size() > 0) {
+            //runs through all the blocks in the blockchain
             for (int i = 0; i < blockchain.size(); i++) {
                 String fileTitle = blockchain.get(i).getFileTitle();
                 String accessedTime = blockchain.get(i).getFileAccessedTime();
@@ -94,7 +95,7 @@ public class Server {
                     if (!accessedTime.equals(newBlock.getFileAccessedTime())) {
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "
                                 + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
-                        //check if the time of last modification is the same
+                    //check if the time of last modification is the same
                     } if (!modifiedTime.equals(newBlock.getFileModifiedTime())) {
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last modified "
                                 + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());

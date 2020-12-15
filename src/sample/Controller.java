@@ -35,7 +35,7 @@ public class Controller {
             } catch (IOException e) {
                 System.out.println("No such file available. Please try again..");
             }
-        }else {
+        } else {
             System.out.println("Both username and path is needed");
         }
         //clear the text field for the file path

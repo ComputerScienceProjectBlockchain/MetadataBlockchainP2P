@@ -21,12 +21,12 @@
     <children>
         <Label text="Username:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
         <Label prefHeight="17.0" prefWidth="70.0" text="Path to file:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-        <TextField fx:id="textFieldPath" prefHeight="27.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        <TextField fx:id="textFieldUser" prefHeight="27.0" prefWidth="315.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <GridPane.margin>
                 <Insets right="10.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="textFieldUser" prefHeight="27.0" prefWidth="315.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+        <TextField fx:id="textFieldPath" prefHeight="27.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
             <GridPane.margin>
                 <Insets right="10.0" />
             </GridPane.margin>

@@ -7,7 +7,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MetadataTest {
-
+    //When testing - please write a valid path from the testers computer
     String path = "C:\\Users\\WinSa\\OneDrive\\Dokumenter\\RUC\\Fifth semester\\CS project\\MetadataBlockchainP2P\\TEST.docx";
     @Test
     void getTitle() throws IOException {

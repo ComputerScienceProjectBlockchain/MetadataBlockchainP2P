@@ -56,13 +56,13 @@ public class Peer{
                 //and then the super peer can send the missing blocks back
                 this.objectOutputStream.writeObject(blockchain.size());
                 System.out.println(blockchain.size());
-            }catch(IOException i){
+            } catch(IOException i){
                 System.out.println("No connection to a socket established. \n Trying again...");
-            }catch( ClassNotFoundException c){
+            } catch( ClassNotFoundException c){
                 c.printStackTrace();
                 System.out.println("The method readStorage() had no text file to read from.");
             }
-        }while(socket == null);
+        } while(socket == null);
     }
 
     //connects to the super peer and sends a block the peer wants to add to the blockchain
@@ -110,7 +110,7 @@ public class Peer{
         return block;
     }
 
-    //sends a prepared block to the super peer
+    //sends a prepared block to the super-peer
     public void sendBlock(Block preparedBlock) {
         connectToSuper(preparedBlock);
         Server server = new Server(blockchain);
@@ -132,10 +132,10 @@ public class Peer{
         try {
             //read out the latest version of the txt-file
             blockchain = readStorage();
-        }catch(IOException i){
+        } catch(IOException i){
             i.printStackTrace();
             System.out.println("Not connected to any socket.");
-        }catch (ClassNotFoundException c){
+        } catch (ClassNotFoundException c){
             c.printStackTrace();
             System.out.println("The method readStorage() had no text file to read from.");
         }

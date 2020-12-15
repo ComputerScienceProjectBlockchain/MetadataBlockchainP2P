@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+//this is the automatically generated main class for javafx programs.
 public class Main extends Application {
 
     @Override

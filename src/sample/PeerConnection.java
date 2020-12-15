@@ -60,11 +60,15 @@ public class PeerConnection implements Runnable {
                 e.printStackTrace();
                 System.out.println("Not able to read the object from the input stream. \n Trying again...");
             }
-        }while(o.equals("null"));
+        } while(o.equals("null"));
         return o;
     }
 
-    //this method uses either sendMissingBlocks or sendNewBlock based of what instance the object is
+        //if the object is an Integer, then we know that the input is the length of a peers blockchain
+        //therefore we need to use sendMissingBlocks to update a peers blockchain
+
+
+        //this method uses either sendMissingBlocks or sendNewBlock based of what instance the object is
     private void sendToPeer(Object o) {
         try {
             if (o instanceof Integer) {
@@ -80,7 +84,7 @@ public class PeerConnection implements Runnable {
             } else {
                 System.out.println("Invalid blockchain");
             }
-        }catch(IOException i){
+        } catch(IOException i){
             i.printStackTrace();
             System.out.println("No socket available");
         }
@@ -129,15 +133,19 @@ public class PeerConnection implements Runnable {
         //has the correct previous hash. The previous hash must be equal to the hash
         //of the previous block or the blockchain is empty -
         // if it is empty then there is no previous hash to compare with
-        if (blockchain.isEmpty()||block.getPreviousHash().equals(blockchain.get(blockchain.size() - 1).getHash())){
+        if (blockchain.isEmpty()||block.getPreviousHash().equals(
+                blockchain.get(blockchain.size() - 1).getHash())){
             //block gets add to the blockchain
             addBlockToBlockchain(block);
             //for(String peer : superpeer.getPeerIP()) {
-            System.out.println("Sending blocks to Peer: " + socket.getInetAddress().getHostAddress());
+            System.out.println("Sending blocks to Peer: " +
+                    socket.getInetAddress().getHostAddress());
             //initializing a new socket, with the peers IP and the port the peer is listening on
-            Socket peerSocket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+            Socket peerSocket = new Socket(socket.getInetAddress()
+                    .getHostAddress(), 7778);
             outputStream = peerSocket.getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            ObjectOutputStream objectOutputStream
+                    = new ObjectOutputStream(outputStream);
             //send the block to the peer
             objectOutputStream.writeObject(block);
             System.out.println("Sending back block");
@@ -171,4 +179,8 @@ public class PeerConnection implements Runnable {
             e.printStackTrace();
         }
     }
+
+
 }
+
+

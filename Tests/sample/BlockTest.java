@@ -7,7 +7,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BlockTest {
-
+    //When testing - please write a valid path from the testers computer
     String path = "C:\\Users\\WinSa\\OneDrive\\Dokumenter\\RUC\\Fifth semester\\CS project\\MetadataBlockchainP2P\\TEST.docx";
 
     @Test
@@ -37,7 +37,7 @@ class BlockTest {
     @Test
     void getFileAccessedTime() throws IOException {
         Block block = new Block(new Metadata(path),"0","Tester");
-        assertEquals("2020-12-11T15:15:42.6610821Z",block.getFileAccessedTime());
+        assertEquals("2020-12-15T09:37:09.6468987Z",block.getFileAccessedTime());
     }
 
     @Test

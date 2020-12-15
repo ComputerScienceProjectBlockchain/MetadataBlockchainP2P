@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
-    //class to extract metadata for a file provide through a file path
+//class to extract metadata for a file provide through a file path
 public class Metadata {
     private final String title;
     private final String creationTime;
