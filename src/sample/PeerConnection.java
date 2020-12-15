@@ -152,7 +152,9 @@ public class PeerConnection implements Runnable {
         newBlock.mineBlock(difficulty);
         //add the block to the blockchain
         blockchain.add(newBlock);
-        newBlock.setHeight(newBlock.getHeight() + 1);
+            // "height" is used to indicate the "distance" from the origin (the genesis block) as well as the size of the blockchain
+            //https://monero.stackexchange.com/questions/3303/whats-the-difference-between-block-height-and-block-number
+        newBlock.setHeight(blockchain.indexOf(newBlock));
         System.out.println("Block version number: " + newBlock.getHeight());
         //the txt-file where the blockchain is saved
         updateBlockchain(blockchain);

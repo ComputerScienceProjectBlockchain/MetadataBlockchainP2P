@@ -16,8 +16,8 @@ public class Block implements Serializable {
     private final String fileModifiedTime;
     private final String userName;
     private final long timeStamp;           //as number of milliseconds since 1/1/1970
-    private static int height;              //counting how many blocks there are in the chain
-    private int miningNonce;                //nonce used for the mining, starts at 0
+    private int height;              //counting how many blocks there are in the chain
+    private int nonce;                //nonce used for the mining, starts at 0
 
     //Block Constructor.
     //instead of the string data, we should use an arrayList containing
@@ -33,14 +33,14 @@ public class Block implements Serializable {
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
         // random number used once; nonce = "number used once"
-        int nonce = new Random().nextInt(Integer.MAX_VALUE);
+
         //Making sure we do this after we set the other values
-        this.hash = calculateHash(nonce);
+        this.hash = calculateHash();
     }
 
     //Calculate new hash based on blocks contents
     //nonce as input so that we can use same method for miningNonce and nonce
-    public String calculateHash(int nonce) {
+    public String calculateHash() {
         return StringUtil.applySha256(
             previousHash +
                     Long.toString(timeStamp) +
@@ -56,8 +56,8 @@ public class Block implements Serializable {
         //while substring of hash not equals "0"*difficulty
         while(!this.getHash().substring( 0, difficulty).equals(target)) {                                                                       //while the condition not fulfilled
             //add one to nonce and calculate new hash with nonce
-            miningNonce ++;
-            hash = calculateHash(miningNonce); //
+            nonce++;
+            hash = calculateHash(); //
         }
         System.out.println("Block Mined!!! : " + this.getHash());
     }
@@ -75,7 +75,7 @@ public class Block implements Serializable {
     }
 
     public void setHeight(int height) {
-        Block.height = height;
+        this.height = height;
     }
 
     public String getFileTitle() {
