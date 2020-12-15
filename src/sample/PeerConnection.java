@@ -39,12 +39,51 @@ public class PeerConnection implements Runnable {
         sendToPeer(receiveObjects());
     }
 
-    //method to prepare an ObjectOutputStream
-    //exception needs to be passed on, because we return an ObjectOutputStream
-    private ObjectOutputStream prepareObjectOutputStream() throws IOException {
-        this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
-        outputStream = this.socket.getOutputStream();
-        return new ObjectOutputStream(outputStream);
+    //method to receive length of a peers blockchain, so the number of blocks a peer has
+    //with that the super peer can check if the peer missed to receive some blocks
+    private Object receiveObjects() {
+        //we need to initialize the object outside try-catch statement
+        //therefore we had to add a do while loop, so that we first return the object when it is not "null" anymore
+        Object o = "null";
+        do {
+            try {
+                System.out.println("Receiving objects");
+                InputStream inputStream = socket.getInputStream();
+                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                o = objectInputStream.readObject();
+                //we can catch two different exceptions
+                //we chose to catch them separately so that we can print different messages for each
+            } catch (IOException i) {
+                i.printStackTrace();
+                System.out.println("No input stream available. \n Trying again...");
+            } catch(ClassNotFoundException e){
+                e.printStackTrace();
+                System.out.println("Not able to read the object from the input stream. \n Trying again...");
+            }
+        }while(o.equals("null"));
+        return o;
+    }
+
+    //this method uses either sendMissingBlocks or sendNewBlock based of what instance the object is
+    private void sendToPeer(Object o) {
+        try {
+            if (o instanceof Integer) {
+                //if the object is an Integer, then we know that the input is the length of a peers blockchain
+                //therefore we need to use sendMissingBlocks to update a peers blockchain
+                Integer index = (Integer) o;
+                sendMissingBlocks(index);
+            } else if (o instanceof Block) {
+                //if the input is a Block, then we know that a peer would like to add a new block to the blockchain
+                //therefore we need to use sendNewBlock, where it will be checked if the block can be added
+                Block block = (Block) o;
+                sendNewBlock(block);
+            } else {
+                System.out.println("Invalid blockchain");
+            }
+        }catch(IOException i){
+            i.printStackTrace();
+            System.out.println("No socket available");
+        }
     }
 
     //method to check if a peer has the same blockchain as the super peer
@@ -76,7 +115,15 @@ public class PeerConnection implements Runnable {
         }
     }
 
-    //method to send a new block to a peer
+    //method to prepare an ObjectOutputStream
+    //exception needs to be passed on, because we return an ObjectOutputStream
+    private ObjectOutputStream prepareObjectOutputStream() throws IOException {
+        this.socket = new Socket(socket.getInetAddress().getHostAddress(), 7778);
+        outputStream = this.socket.getOutputStream();
+        return new ObjectOutputStream(outputStream);
+    }
+
+        //method to send a new block to a peer
     private void sendNewBlock(Block block) throws IOException{
         //first we need to check if the block the super peer received
         //has the correct previous hash. The previous hash must be equal to the hash
@@ -99,58 +146,11 @@ public class PeerConnection implements Runnable {
         }
     }
 
-        //this method uses either sendMissingBlocks or sendNewBlock based of what instance the object is
-    private void sendToPeer(Object o) {
-        try {
-            if (o instanceof Integer) {
-                //if the object is an Integer, then we know that the input is the length of a peers blockchain
-                //therefore we need to use sendMissingBlocks to update a peers blockchain
-                Integer index = (Integer) o;
-                sendMissingBlocks(index);
-            } else if (o instanceof Block) {
-                //if the input is a Block, then we know that a peer would like to add a new block to the blockchain
-                //therefore we need to use sendNewBlock, where it will be checked if the block can be added
-                Block block = (Block) o;
-                sendNewBlock(block);
-            } else {
-                System.out.println("Invalid blockchain");
-            }
-        }catch(IOException i){
-            i.printStackTrace();
-            System.out.println("No socket available");
-        }
-    }
-
-        //method to receive length of a peers blockchain, so the number of blocks a peer has
-        //with that the super peer can check if the peer missed to receive some blocks
-    private Object receiveObjects() {
-        //we need to initialize the object outside try-catch statement
-        //therefore we had to add a do while loop, so that we first return the object when it is not "null" anymore
-        Object o = "null";
-        do {
-            try {
-                System.out.println("Receiving objects");
-                InputStream inputStream = socket.getInputStream();
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                o = objectInputStream.readObject();
-                //we can catch two different exceptions
-                //we chose to catch them separately so that we can print different messages for each
-            } catch (IOException i) {
-               i.printStackTrace();
-                System.out.println("No input stream available. \n Trying again...");
-            } catch(ClassNotFoundException e){
-                e.printStackTrace();
-                System.out.println("Not able to read the object from the input stream. \n Trying again...");
-            }
-        }while(o.equals("null"));
-        return o;
-    }
-
-        //A method which adds blocks to the blockchain
+    //A method which adds blocks to the blockchain
     private void addBlockToBlockchain(Block newBlock) {
-            //first need to mine the block and put some effort in
+        //first need to mine the block and put some effort in
         newBlock.mineBlock(difficulty);
-            //add the block to the blockchain
+        //add the block to the blockchain
         blockchain.add(newBlock);
         newBlock.setHeight(newBlock.getHeight() + 1);
         System.out.println("Block version number: " + newBlock.getHeight());
@@ -158,7 +158,7 @@ public class PeerConnection implements Runnable {
         updateBlockchain(blockchain);
     }
 
-        //method to update the txt-file where the blockchain is saved
+    //method to update the txt-file where the blockchain is saved
     private void updateBlockchain(ArrayList<Block> blockchain){
         try {
             FileOutputStream out = new FileOutputStream("storage.txt");
