@@ -72,7 +72,7 @@ class PeerTest {
         }
     }
 
-    //Testing of compareBlocks method from the Server class
+    //Testing of compareBlocks method from the PeerConnection class
     //The compareBlocks method also compare the lastModifiedTime and lastAccessedTime,
     // this is however not possible to test
     @Test

@@ -31,19 +31,19 @@ class BlockTest {
     @Test
     void getFileCreatedTime() throws IOException {
         Block block = new Block(new Metadata(path),"0","Tester");
-        assertEquals("2020-12-11T15:15:37.3720663Z",block.getFileCreatedTime());
+        assertEquals("11-12-2020 15:15:37",block.getFileCreatedTime());
     }
 
     @Test
     void getFileAccessedTime() throws IOException {
         Block block = new Block(new Metadata(path),"0","Tester");
-        assertEquals("2020-12-15T09:37:09.6468987Z",block.getFileAccessedTime());
+        assertEquals("15-12-2020 22:59:35",block.getFileAccessedTime());
     }
 
     @Test
     void getFileModifiedTime() throws IOException {
         Block block = new Block(new Metadata(path),"0","Tester");
-        assertEquals("2020-12-11T15:15:37.3720663Z",block.getFileModifiedTime());
+        assertEquals("11-12-2020 15:15:37",block.getFileModifiedTime());
     }
 
     @Test

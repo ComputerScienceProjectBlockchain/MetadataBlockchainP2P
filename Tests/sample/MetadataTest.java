@@ -18,18 +18,18 @@ class MetadataTest {
     @Test
     void getCreationTime() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("2020-12-11T15:15:37.3720663Z",metadata.getCreationTime());
+        assertEquals("11-12-2020 15:15:37",metadata.getCreationTime());
     }
 
     @Test
     void getLastAccessTime() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("2020-12-11T15:15:42.6610821Z",metadata.getLastAccessTime());
+        assertEquals("15-12-2020 22:59:35",metadata.getLastAccessTime());
     }
 
     @Test
     void getLastModifiedTime() throws IOException {
         Metadata metadata = new Metadata(path);
-        assertEquals("2020-12-11T15:15:37.3720663Z",metadata.getLastModifiedTime());
+        assertEquals("11-12-2020 15:15:37",metadata.getLastModifiedTime());
     }
 }
