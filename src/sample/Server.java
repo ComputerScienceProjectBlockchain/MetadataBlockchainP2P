@@ -56,8 +56,6 @@ public class Server {
                 return true;
             } else {
                 Block block = (Block) o;
-                //compare method to check if the file name already appears in the blockchain
-                compareBlocks(blockchain, block);
                 //will only add block to blockchain if the blockchain is either
                 //empty or the last hash of the blockchain is the same as the previous hash of the new block
                 blockchain.add(block);
@@ -76,32 +74,6 @@ public class Server {
             oos.close();
         } catch(Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    //method to check if a file has been added before
-    //and if so compare last accessed time and the modified time
-    private static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
-        if (blockchain.size() > 0) {
-            //runs through all the blocks in the blockchain
-            for (int i = 0; i < blockchain.size(); i++) {
-                String fileTitle = blockchain.get(i).getFileTitle();
-                String accessedTime = blockchain.get(i).getFileAccessedTime();
-                String modifiedTime = blockchain.get(i).getFileModifiedTime();
-                //check if the new file has been added before
-                if (fileTitle.equals(newBlock.getFileTitle())) {
-                    System.out.println("Block number " + i + " has the same name as the new file");
-                    //check if the time when the file was last accessed is the same
-                    if (!accessedTime.equals(newBlock.getFileAccessedTime())) {
-                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "
-                                + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
-                    //check if the time of last modification is the same
-                    } if (!modifiedTime.equals(newBlock.getFileModifiedTime())) {
-                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified "
-                                + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
-                    }
-                }
-            }
         }
     }
 }

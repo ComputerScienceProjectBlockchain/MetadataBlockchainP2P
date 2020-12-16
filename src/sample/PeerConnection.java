@@ -158,6 +158,8 @@ public class PeerConnection implements Runnable {
     private void addBlockToBlockchain(Block newBlock) {
         //first need to mine the block and put some effort in
         newBlock.mineBlock(difficulty);
+        //compare method to check if the file name already appears in the blockchain
+        compareBlocks(blockchain,newBlock);
         //add the block to the blockchain
         blockchain.add(newBlock);
             // "height" is used to indicate the "distance" from the origin (the genesis block) as well as the size of the blockchain
@@ -180,6 +182,33 @@ public class PeerConnection implements Runnable {
         }
     }
 
+    //method to check if a file has been added before
+    //and if so compare last accessed time and the modified time
+    private static void compareBlocks(ArrayList<Block> blockchain, Block newBlock) {
+        if (blockchain.size() > 0) {
+            //runs through all the blocks in the blockchain
+            for (int i = 0; i < blockchain.size(); i++) {
+                String fileTitle = blockchain.get(i).getFileTitle();
+                String accessedTime = blockchain.get(i).getFileAccessedTime();
+                String modifiedTime = blockchain.get(i).getFileModifiedTime();
+                //check if the new file has been added before
+                if (fileTitle.equals(newBlock.getFileTitle())) {
+                    System.out.println("Block number " + i + " has the same name as the new file");
+                    //check if the time when the file was last accessed is the same
+                    if (!accessedTime.equals(newBlock.getFileAccessedTime())) {
+                        System.out.println("Last accessed time has changed!");
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "
+                                + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
+                        //check if the time of last modification is the same
+                    } if (!modifiedTime.equals(newBlock.getFileModifiedTime())) {
+                        System.out.println("Last modified time has changed!");
+                        System.out.println("The file: " + newBlock.getFileTitle() + " was last modified "
+                                + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
+                    }
+                }
+            }
+        }
+    }
 
 }
 
