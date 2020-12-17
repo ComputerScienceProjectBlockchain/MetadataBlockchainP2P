@@ -55,7 +55,6 @@ public class Peer{
                 //then the super peer can see which blocks the peer is missing
                 //and then the super peer can send the missing blocks back
                 this.objectOutputStream.writeObject(blockchain.size());
-                System.out.println(blockchain.size());
             } catch(IOException i){
                 System.out.println("No connection to a socket established. \n Trying again...");
             } catch( ClassNotFoundException c){

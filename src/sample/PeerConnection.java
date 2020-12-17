@@ -108,7 +108,6 @@ public class PeerConnection implements Runnable {
                 ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
                 System.out.println("blockchain length:" + blockchain.size());
                 objectOutputStream.writeObject(blockchain.get(i));
-                System.out.println(blockchain.get(i));
             }
             //after sending all blocks we send a message to the server of the peer
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
@@ -199,11 +198,13 @@ public class PeerConnection implements Runnable {
                         System.out.println("Last accessed time has changed!");
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last accessed "
                                 + newBlock.getFileAccessedTime() + " by " + newBlock.getUserName());
+                        System.out.println();
                         //check if the time of last modification is the same
                     } if (!modifiedTime.equals(newBlock.getFileModifiedTime())) {
                         System.out.println("Last modified time has changed!");
                         System.out.println("The file: " + newBlock.getFileTitle() + " was last modified "
                                 + newBlock.getFileModifiedTime() + " by " + newBlock.getUserName());
+                        System.out.println();
                     }
                 }
             }
