@@ -51,6 +51,8 @@ public class PeerConnection implements Runnable {
                 InputStream inputStream = socket.getInputStream();
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                 o = objectInputStream.readObject();
+                System.out.println("Objects received");
+                System.out.println();
                 //we can catch two different exceptions
                 //we chose to catch them separately so that we can print different messages for each
             } catch (IOException i) {
@@ -100,6 +102,7 @@ public class PeerConnection implements Runnable {
             System.out.println("Blockchain is empty");
             //if it is empty, we send a message to the server of the peer
             objectOutputStream.writeObject("Is Empty");
+            System.out.println();
         } else {
             //if the blockchain is not empty, we compare the size of the blockchain of the peer
             //with the size of the blockchain of the superpeer
@@ -113,6 +116,7 @@ public class PeerConnection implements Runnable {
             ObjectOutputStream objectOutputStream = prepareObjectOutputStream();
             objectOutputStream.writeObject("Entire blockchain sent");
             System.out.println("Entire blockchain sent");
+            System.out.println();
             //the last we do is closing the socket
             this.socket.close();
         }

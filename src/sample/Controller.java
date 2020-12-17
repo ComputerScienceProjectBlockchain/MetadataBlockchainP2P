@@ -30,7 +30,7 @@ public class Controller {
             try {
                 Block block = peer.prepareBlock(textFieldUser.getText(), textFieldPath.getText());
                 //send the prepared block to the super peer
-                System.out.println(block.getFileTitle());
+                System.out.println("Sending " + block.getFileTitle() + " to superpeer");
                 peer.sendBlock(block);
             } catch (IOException e) {
                 System.out.println("No such file available. Please try again..");

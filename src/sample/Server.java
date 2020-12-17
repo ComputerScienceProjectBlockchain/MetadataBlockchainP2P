@@ -60,6 +60,7 @@ public class Server {
                 //empty or the last hash of the blockchain is the same as the previous hash of the new block
                 blockchain.add(block);
                 saveBlockchain();
+                System.out.println();
                 return false;
             }
         }while (o.equals("null")) ;
