@@ -12,7 +12,6 @@ public class Metadata {
     private final String creationTime;
     private final String lastAccessTime;
     private final String lastModifiedTime;
-    String size;
 
     public Metadata(String path) throws IOException {
         //In order to access the metadata of the file you have to use the classes
@@ -23,7 +22,6 @@ public class Metadata {
         this.creationTime = changeTimeFormat(String.valueOf(attr.creationTime()));
         this.lastAccessTime = changeTimeFormat(String.valueOf(attr.lastAccessTime()));
         this.lastModifiedTime = changeTimeFormat(String.valueOf(attr.lastModifiedTime()));
-        this.size = String.valueOf(attr.size());
         this.title = String.valueOf(file.getFileName());
     }
 

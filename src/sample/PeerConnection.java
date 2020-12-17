@@ -52,7 +52,7 @@ public class PeerConnection implements Runnable {
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                 o = objectInputStream.readObject();
                 System.out.println("Objects received");
-                System.out.println();
+                System.out.println( );
                 //we can catch two different exceptions
                 //we chose to catch them separately so that we can print different messages for each
             } catch (IOException i) {
